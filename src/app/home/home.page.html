@@ -1,0 +1,57 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>
+      <!-- Logo Aplikasi Anda -->
+      <img
+        src="assets/icon/favicon.png"
+        alt="Logo"
+        style="height: 30px; vertical-align: middle; margin-right: 10px"
+      />
+      <b>Pejuang News</b>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="doLogout()">
+        <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="welcome-section">
+    <h1>Selamat Datang, {{ namaUser }}!</h1>
+    <p>Berikut adalah berita terbaru hari ini.</p>
+  </div>
+
+  <div class="kategori-section">
+    <h2>Kategori</h2>
+    <div class="kategori-scroll">
+      <ion-chip
+        *ngFor="let kat of semuaKategori"
+        (click)="lihatKategori(kat.id)"
+      >
+        <ion-label>{{ kat.nama }}</ion-label>
+      </ion-chip>
+    </div>
+  </div>
+
+  <div class="berita-section">
+    <h2>Berita Terbaru</h2>
+    <ion-card
+      *ngFor="let berita of beritaTerbaru"
+      (click)="bacaBerita(berita.id)"
+      class="berita-card"
+    >
+      <img [src]="berita.foto_utama" class="berita-image" />
+      <ion-card-header>
+        <ion-card-subtitle>
+          <!-- Menampilkan nama kategori pertama dari berita -->
+          <ion-chip color="primary" class="kategori-chip-kecil" outline="true">
+            <ion-label>{{ berita.namaKategori[0] }}</ion-label>
+          </ion-chip>
+        </ion-card-subtitle>
+        <ion-card-title>{{ berita.judul }}</ion-card-title>
+      </ion-card-header>
+    </ion-card>
+  </div>
+</ion-content>

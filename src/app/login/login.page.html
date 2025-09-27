@@ -1,0 +1,36 @@
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="login-container">
+    <div class="login-header">
+      <img
+        src="https://ionicframework.com/docs/img/demos/logo.svg"
+        alt="App Logo"
+      />
+      <h1>Selamat Datang</h1>
+      <p>Silakan masuk ke Portal Berita</p>
+    </div>
+
+    <div class="login-form">
+      <ion-item lines="full">
+        <ion-label position="floating">Username</ion-label>
+        <ion-input [(ngModel)]="inputUsername" type="text" required></ion-input>
+      </ion-item>
+
+      <ion-item lines="full">
+        <ion-label position="floating">Password</ion-label>
+        <ion-input
+          [(ngModel)]="inputPassword"
+          type="password"
+          required
+        ></ion-input>
+      </ion-item>
+
+      <p *ngIf="loginError" class="error-message">
+        Username atau password salah! Silakan coba lagi.
+      </p>
+
+      <ion-button expand="block" (click)="doLogin()" class="login-button">
+        Masuk
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

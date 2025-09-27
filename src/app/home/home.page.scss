@@ -1,0 +1,89 @@
+:root {
+  --ion-color-primary: #3880ff;
+  --ion-color-primary-shade: #3171e0;
+  --ion-color-light-shade: #f4f5f8;
+}
+
+ion-toolbar {
+  --background: #ffffff;
+  --color: #000000;
+}
+
+.welcome-section {
+  h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  p {
+    color: var(--ion-color-medium-shade);
+    font-size: 1rem;
+  }
+}
+
+.kategori-section,
+.berita-section {
+  margin-top: 24px;
+  h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+}
+
+.kategori-scroll {
+  display: flex;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+ion-chip {
+  margin-right: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    transform: translateY(-2px);
+    background: var(--ion-color-primary);
+    color: white;
+  }
+}
+
+.berita-card {
+  cursor: pointer;
+  margin: 0 0 20px 0; // Menghilangkan margin kiri-kanan default
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  }
+
+  .berita-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+  }
+
+  ion-card-header {
+    padding: 16px;
+  }
+
+  ion-card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: 8px;
+    line-height: 1.4;
+  }
+
+  .kategori-chip-kecil {
+    height: 24px;
+    font-size: 0.75rem;
+  }
+}
