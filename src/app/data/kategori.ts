@@ -1,16 +1,15 @@
 export interface Kategori {
   id: number;
   nama: string;
+  icon: string;
 }
 
-const KATEGORI: Kategori[] = [
-  { id: 1, nama: 'Teknologi' },
-  { id: 2, nama: 'Olah Raga' },
-  { id: 3, nama: 'Ekonomi' },
-  { id: 4, nama: 'Hiburan' },
-  { id: 5, nama: 'Politik' },
-];
-
-export const getAllKategori = (): Kategori[] => {
-  return KATEGORI;
-};
+export function getAllKategori(): Kategori[] {
+  return [
+    { id: 1, nama: 'Teknologi', icon: 'assets/icon/technology.png' },
+    { id: 2, nama: 'Olahraga', icon: 'assets/icon/olahraga.png' },
+    { id: 3, nama: 'Ekonomi', icon: 'assets/icon/ekonomi.png' },
+    { id: 4, nama: 'Politik', icon: 'assets/icon/politik.png' },
+    { id: 5, nama: 'Hiburan', icon: 'assets/icon/entertainment.png' },
+  ];
+}
