@@ -184,5 +184,6 @@ export const getBeritaWithKategori = (): BeritaDetail[] => {
 };
 
 export const getBeritaByKategori = (idKategori: number): Berita[] => {
+  
   return BERITA.filter((berita) => berita.idKategori.includes(idKategori));
 };

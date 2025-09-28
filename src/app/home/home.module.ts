@@ -6,6 +6,9 @@ import { HomePageRoutingModule } from './home-routing.module';
 
 import { HomePage } from './home.page';
 
+import { RouterModule } from '@angular/router';
+
+
 @NgModule({
   imports: [
     CommonModule,

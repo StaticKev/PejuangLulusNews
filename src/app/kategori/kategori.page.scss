@@ -1,0 +1,57 @@
+/* kategori.page.scss atau kategori.page.css */
+
+.kategori-card {
+    margin: 8px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.2s;
+    overflow: hidden; /* Penting untuk memastikan gambar tidak keluar dari rounded corner */
+}
+
+.kategori-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.card-image-container {
+    /* Area gambar: Atur rasio aspek 1:1 */
+    /* Kita hapus background-color ungu di sini, karena gambar akan mengisi penuh */
+    /* background-color: #e6e0ff; */ 
+    padding-top: 100%; /* Membuat kotak menjadi persegi (tinggi = lebar) */
+    position: relative;
+    border-radius: 12px 12px 0 0; /* Corner atas saja */
+}
+
+.card-icon {
+    /* Posisi ikon di tengah area ungu */
+    position: absolute;
+    top: 0;   /* Ganti dari 50% menjadi 0 */
+    left: 0;  /* Ganti dari 50% menjadi 0 */
+    width: 100%; /* Membuat ikon mengisi lebar penuh container */
+    height: 100%; /* Membuat ikon mengisi tinggi penuh container */
+    object-fit: cover; /* **Penting:** Ini akan memotong gambar (crop) agar mengisi area 1x1 */
+    border-radius: inherit; /* Mewarisi border-radius dari parent (card) */
+    /* opacity: 0.7; Ini bisa dihapus jika tidak lagi diperlukan efek placeholder */
+}
+
+.card-label-item {
+    --padding-start: 0;
+    --inner-padding-end: 0;
+}
+
+.kategori-nama {
+    display: inline-block;
+    padding: 4px 10px;
+    background-color: #f0f0ff;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 500;
+    color: #6200EE;
+}
+
+.ion-text-center {
+    text-align: center !important;
+    width: 100%;
+    padding: 10px 0;
+}

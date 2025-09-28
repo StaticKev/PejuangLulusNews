@@ -17,6 +17,15 @@ const routes: Routes = [
     loadChildren: () =>
       import('./login/login.module').then((m) => m.LoginPageModule),
   },
+  {
+    path: 'kategori',
+    loadChildren: () => import('./kategori/kategori.module').then( m => m.KategoriPageModule)
+  },  {
+    path: 'kategoripolitik',
+    loadChildren: () => import('./kategoripolitik/kategoripolitik.module').then( m => m.KategoripolitikPageModule)
+  },
+
+
 ];
 
 @NgModule({

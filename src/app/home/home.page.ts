@@ -6,13 +6,14 @@ import { CommonModule } from '@angular/common';
 import { BeritaDetail, getBeritaWithKategori } from '../data/berita';
 import { Kategori, getAllKategori } from '../data/kategori';
 import { AuthService } from '../data/auth';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule],
+  imports: [IonicModule, CommonModule, RouterModule, IonicModule],
 })
 export class HomePage implements OnInit {
   public semuaBerita: BeritaDetail[] = [];   // semua berita
