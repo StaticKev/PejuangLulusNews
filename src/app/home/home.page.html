@@ -29,6 +29,7 @@
       <ion-chip
         *ngFor="let kat of semuaKategori"
         (click)="lihatKategori(kat.id)"
+        [color]="kategoriAktif === kat.id ? 'primary' : ''"
       >
         <ion-label>{{ kat.nama }}</ion-label>
       </ion-chip>
@@ -45,10 +46,13 @@
       <img [src]="berita.foto_utama" class="berita-image" />
       <ion-card-header>
         <ion-card-subtitle>
-          <!-- Menampilkan nama kategori pertama dari berita -->
+          <!-- Menampilkan kategori sesuai filter aktif -->
           <ion-chip color="primary" class="kategori-chip-kecil" outline="true">
-            <ion-label>{{ berita.namaKategori[0] }}</ion-label>
-          </ion-chip>
+  <ion-label>
+    {{ getNamaKategori(berita) }}
+  </ion-label>
+</ion-chip>
+
         </ion-card-subtitle>
         <ion-card-title>{{ berita.judul }}</ion-card-title>
       </ion-card-header>
