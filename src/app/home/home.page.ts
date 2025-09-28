@@ -15,8 +15,10 @@ import { AuthService } from '../data/auth';
   imports: [IonicModule, CommonModule],
 })
 export class HomePage implements OnInit {
-  public beritaTerbaru: BeritaDetail[] = [];
+  public semuaBerita: BeritaDetail[] = [];   // semua berita
+  public beritaTerbaru: BeritaDetail[] = []; // berita yg ditampilkan (filtered)
   public semuaKategori: Kategori[] = [];
+  public kategoriAktif: number | null = null;
   public namaUser: string = 'Pejuang Lulus';
 
   constructor(private router: Router, private authService: AuthService) {
@@ -24,9 +26,10 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit() {
-    this.beritaTerbaru = getBeritaWithKategori().sort(
+    this.semuaBerita = getBeritaWithKategori().sort(
       (a, b) => b.timestamp.getTime() - a.timestamp.getTime()
     );
+    this.beritaTerbaru = [...this.semuaBerita]; // awalnya semua berita
     this.semuaKategori = getAllKategori();
   }
 
@@ -35,8 +38,30 @@ export class HomePage implements OnInit {
   }
 
   lihatKategori(idKategori: number) {
-    this.router.navigate(['/daftar-berita', idKategori]);
+    if (this.kategoriAktif === idKategori) {
+      // klik ulang kategori → reset ke semua berita
+      this.kategoriAktif = null;
+      this.beritaTerbaru = [...this.semuaBerita];
+    } else {
+      // filter berita sesuai kategori
+      this.kategoriAktif = idKategori;
+      this.beritaTerbaru = this.semuaBerita.filter((b) =>
+        b.idKategori.includes(idKategori)
+      );
+    }
   }
+  getNamaKategori(berita: BeritaDetail): string {
+  if (this.kategoriAktif) {
+    // cari index kategori yang cocok
+    const idx = berita.idKategori.indexOf(this.kategoriAktif);
+    if (idx !== -1) {
+      return berita.namaKategori[idx];
+    }
+  }
+  // fallback: pakai kategori pertama
+  return berita.namaKategori[0];
+}
+
 
   doLogout() {
     this.authService.logout();
