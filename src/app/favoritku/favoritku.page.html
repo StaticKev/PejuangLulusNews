@@ -1,0 +1,28 @@
+<ion-header class="ion-no-border">
+    <ion-toolbar>
+        <ion-title>
+            <!-- Logo Aplikasi Anda -->
+            <img
+            src="assets/icon/favicon.png"
+            alt="Logo"
+            style="height: 30px; vertical-align: middle; margin-right: 10px"
+            />
+            <b>Pejuang News</b>
+        </ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="doLogout()">
+              <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Favoritku</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <app-explore-container name="Halaman Favoritku"></app-explore-container>
+</ion-content>

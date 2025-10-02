@@ -20,12 +20,19 @@ const routes: Routes = [
   {
     path: 'kategori',
     loadChildren: () => import('./kategori/kategori.module').then( m => m.KategoriPageModule)
-  },  {
+  },
+  {
     path: 'kategoripolitik',
     loadChildren: () => import('./kategoripolitik/kategoripolitik.module').then( m => m.KategoripolitikPageModule)
   },
-
-
+  {
+    path: 'favoritku',
+    loadChildren: () => import('./favoritku/favoritku.module').then(m => m.FavoritkuPageModule)
+  },
+  {
+    path: 'cari',
+    loadChildren: () => import('./cari/cari.module').then( m => m.CariPageModule)
+  }
 ];
 
 @NgModule({
