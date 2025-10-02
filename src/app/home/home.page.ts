@@ -1,68 +1,96 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 
 import { BeritaDetail, getBeritaWithKategori } from '../data/berita';
 import { Kategori, getAllKategori } from '../data/kategori';
 import { AuthService } from '../data/auth';
-import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, RouterModule, IonicModule],
+  imports: [IonicModule, CommonModule, RouterModule],
 })
 export class HomePage implements OnInit {
-  public semuaBerita: BeritaDetail[] = [];   // semua berita
-  public beritaTerbaru: BeritaDetail[] = []; // berita yg ditampilkan (filtered)
+  public semuaBerita: BeritaDetail[] = [];
+  public beritaTerbaru: BeritaDetail[] = [];
   public semuaKategori: Kategori[] = [];
   public kategoriAktif: number | null = null;
   public namaUser: string = 'Pejuang Lulus';
 
-  constructor(private router: Router, private authService: AuthService) {
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private authService: AuthService
+  ) {
     this.authService.checkLogin();
   }
 
   ngOnInit() {
+    this.semuaKategori = getAllKategori();
     this.semuaBerita = getBeritaWithKategori().sort(
       (a, b) => b.timestamp.getTime() - a.timestamp.getTime()
     );
-    this.beritaTerbaru = [...this.semuaBerita]; // awalnya semua berita
-    this.semuaKategori = getAllKategori();
+
+    this.route.queryParams.subscribe((params) => {
+      const namaKategoriDariUrl = params['kategori'];
+
+      if (namaKategoriDariUrl) {
+        const kategoriDitemukan = this.semuaKategori.find(
+          (k) => k.nama.toLowerCase() === namaKategoriDariUrl.toLowerCase()
+        );
+
+        if (kategoriDitemukan) {
+          this.applyFilter(kategoriDitemukan.id);
+        } else {
+          this.applyFilter(null);
+        }
+      } else {
+        this.applyFilter(null);
+      }
+    });
+  }
+
+  lihatKategori(idKategori: number) {
+    if (this.kategoriAktif === idKategori) {
+      this.router.navigate(['/home']);
+    } else {
+      const kategori = this.semuaKategori.find((k) => k.id === idKategori);
+      if (kategori) {
+        this.router.navigate(['/home'], {
+          queryParams: { kategori: kategori.nama.toLowerCase() },
+        });
+      }
+    }
+  }
+
+  private applyFilter(idKategori: number | null) {
+    this.kategoriAktif = idKategori;
+    if (idKategori === null) {
+      this.beritaTerbaru = [...this.semuaBerita];
+    } else {
+      this.beritaTerbaru = this.semuaBerita.filter((berita) =>
+        berita.idKategori.includes(idKategori)
+      );
+    }
   }
 
   bacaBerita(idBerita: number) {
     this.router.navigate(['/baca-berita', idBerita]);
   }
 
-  lihatKategori(idKategori: number) {
-    if (this.kategoriAktif === idKategori) {
-      // klik ulang kategori → reset ke semua berita
-      this.kategoriAktif = null;
-      this.beritaTerbaru = [...this.semuaBerita];
-    } else {
-      // filter berita sesuai kategori
-      this.kategoriAktif = idKategori;
-      this.beritaTerbaru = this.semuaBerita.filter((b) =>
-        b.idKategori.includes(idKategori)
-      );
-    }
-  }
   getNamaKategori(berita: BeritaDetail): string {
-  if (this.kategoriAktif) {
-    // cari index kategori yang cocok
-    const idx = berita.idKategori.indexOf(this.kategoriAktif);
-    if (idx !== -1) {
-      return berita.namaKategori[idx];
+    if (this.kategoriAktif) {
+      const idx = berita.idKategori.indexOf(this.kategoriAktif);
+      if (idx !== -1) {
+        return berita.namaKategori[idx];
+      }
     }
+    return berita.namaKategori[0];
   }
-  // fallback: pakai kategori pertama
-  return berita.namaKategori[0];
-}
-
 
   doLogout() {
     this.authService.logout();

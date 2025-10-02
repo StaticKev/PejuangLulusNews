@@ -34,11 +34,10 @@
       </ion-chip>
     </div>
   </div>
-  
-  <ion-button routerLink="/kategori" expand="block" color="secondary">
-  Lihat Semua Kategori
-</ion-button>
 
+  <ion-button routerLink="/kategori" expand="block" color="secondary">
+    Lihat Semua Kategori
+  </ion-button>
 
   <div class="berita-section">
     <h2>Berita Terbaru</h2>
@@ -50,13 +49,9 @@
       <img [src]="berita.foto_utama" class="berita-image" />
       <ion-card-header>
         <ion-card-subtitle>
-          <!-- Menampilkan kategori sesuai filter aktif -->
           <ion-chip color="primary" class="kategori-chip-kecil" outline="true">
-  <ion-label>
-    {{ getNamaKategori(berita) }}
-  </ion-label>
-</ion-chip>
-
+            <ion-label> {{ getNamaKategori(berita) }} </ion-label>
+          </ion-chip>
         </ion-card-subtitle>
         <ion-card-title>{{ berita.judul }}</ion-card-title>
       </ion-card-header>

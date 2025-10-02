@@ -21,19 +21,17 @@ export class KategoriPage implements OnInit {
   }
 
   /**
-   * Mengarahkan pengguna ke halaman daftar berita.
-   * Jika kategori ID adalah 4 (Politik), navigasi ke halaman khusus '/kategoripolitik'.
-   * Jika tidak, navigasi ke halaman umum '/daftar-berita' dengan parameter ID.
-   * @param kategoriId ID dari kategori yang diklik
+   * @param kategoriId
    */
-  goToBeritaByKategori(kategoriId: number) {
-    // ID 4 diasumsikan untuk kategori 'Politik'
-    if (kategoriId === 4) { 
-      // Navigasi ke rute khusus untuk Politik
-      this.router.navigate(['/kategoripolitik']);
+  goToBeritaByKategori(idKategori: number) {
+    const kategori = this.kategoriList.find((k) => k.id === idKategori);
+
+    if (kategori) {
+      this.router.navigate(['/home'], {
+        queryParams: { kategori: kategori.nama.toLowerCase() },
+      });
     } else {
-      // Navigasi ke rute umum dengan ID sebagai parameter
-      this.router.navigate(['/daftar-berita', kategoriId]);
+      console.error(`Kategori dengan ID ${idKategori} tidak ditemukan.`);
     }
   }
 }
