@@ -16,8 +16,8 @@ import { RouterModule } from '@angular/router';
   imports: [IonicModule, CommonModule, RouterModule, IonicModule],
 })
 export class HomePage implements OnInit {
-  public semuaBerita: BeritaDetail[] = [];   // semua berita
-  public beritaTerbaru: BeritaDetail[] = []; // berita yg ditampilkan (filtered)
+  public semuaBerita: BeritaDetail[] = [];
+  public beritaTerbaru: BeritaDetail[] = [];
   public semuaKategori: Kategori[] = [];
   public kategoriAktif: number | null = null;
   public namaUser: string = 'Pejuang Lulus';
