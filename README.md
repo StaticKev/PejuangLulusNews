@@ -17,6 +17,6 @@
 |✅|Login|-|-
 |❌|Kategori|-|-
 |✅|Daftar Berita|-|-
-|❌|Baca Berita|-|-
+|✅|Baca Berita|-|-
 |❌|Favoritku|-|-
 |❌|Cari Berita|-|-
