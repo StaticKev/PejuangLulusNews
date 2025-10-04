@@ -13,6 +13,9 @@ export interface BeritaDetail extends Berita {
   namaKategori: string[];
 }
 
+// Acuan Kategori:
+// 1: Teknologi, 2: Olahraga, 3: Ekonomi, 4: Politik, 5: Hiburan
+
 const BERITA: Berita[] = [
   {
     id: 101,
@@ -22,8 +25,6 @@ const BERITA: Berita[] = [
     gambar_konten: [
       'https://placehold.co/800x600/007bff/FFFFFF?text=Gambar+1',
       'https://placehold.co/800x600/007bff/FFFFFF?text=Gambar+2',
-      'https://placehold.co/800x600/007bff/FFFFFF?text=Gambar+3',
-      'https://placehold.co/800x600/007bff/FFFFFF?text=Gambar+4',
     ],
     timestamp: new Date('2025-09-26T10:00:00'),
   },
@@ -35,8 +36,6 @@ const BERITA: Berita[] = [
     gambar_konten: [
       'https://placehold.co/800x600/28a745/FFFFFF?text=Laga+1',
       'https://placehold.co/800x600/28a745/FFFFFF?text=Laga+2',
-      'https://placehold.co/800x600/28a745/FFFFFF?text=Laga+3',
-      'https://placehold.co/800x600/28a745/FFFFFF?text=Laga+4',
     ],
     timestamp: new Date('2025-09-27T11:30:00'),
   },
@@ -44,12 +43,10 @@ const BERITA: Berita[] = [
     id: 103,
     judul: 'Startup Lokal Dapatkan Pendanaan Seri B',
     foto_utama: 'https://placehold.co/600x400/ffc107/black?text=Ekonomi',
-    idKategori: [1, 3], // Contoh berita dengan 2 kategori
+    idKategori: [1, 3], // Kategori: Teknologi & Ekonomi
     gambar_konten: [
       'https://placehold.co/800x600/ffc107/000000?text=Info+1',
       'https://placehold.co/800x600/ffc107/000000?text=Info+2',
-      'https://placehold.co/800x600/ffc107/000000?text=Info+3',
-      'https://placehold.co/800x600/ffc107/000000?text=Info+4',
     ],
     timestamp: new Date('2025-09-27T14:00:00'),
   },
@@ -57,12 +54,10 @@ const BERITA: Berita[] = [
     id: 104,
     judul: 'Konser Musik Akbar Akan Digelar di Jakarta',
     foto_utama: 'https://placehold.co/600x400/dc3545/white?text=Hiburan',
-    idKategori: [4],
+    idKategori: [5], // BENAR: Hiburan
     gambar_konten: [
       'https://placehold.co/800x600/dc3545/FFFFFF?text=Artis+1',
       'https://placehold.co/800x600/dc3545/FFFFFF?text=Artis+2',
-      'https://placehold.co/800x600/dc3545/FFFFFF?text=Artis+3',
-      'https://placehold.co/800x600/dc3545/FFFFFF?text=Artis+4',
     ],
     timestamp: new Date('2025-09-25T09:00:00'),
   },
@@ -70,12 +65,10 @@ const BERITA: Berita[] = [
     id: 105,
     judul: 'Debat Publik Calon Kepala Daerah Memanas',
     foto_utama: 'https://placehold.co/600x400/6c757d/white?text=Politik',
-    idKategori: [5],
+    idKategori: [4], // BENAR: Politik
     gambar_konten: [
       'https://placehold.co/800x600/6c757d/FFFFFF?text=Debat+1',
       'https://placehold.co/800x600/6c757d/FFFFFF?text=Debat+2',
-      'https://placehold.co/800x600/6c757d/FFFFFF?text=Debat+3',
-      'https://placehold.co/800x600/6c757d/FFFFFF?text=Debat+4',
     ],
     timestamp: new Date('2025-09-24T18:00:00'),
   },
@@ -107,7 +100,7 @@ const BERITA: Berita[] = [
     id: 109,
     judul: "Film 'Pejuang Lulus' Tembus 1 Juta Penonton",
     foto_utama: 'https://placehold.co/600x400/dc3545/white?text=Hiburan',
-    idKategori: [4],
+    idKategori: [5], // BENAR: Hiburan
     gambar_konten: ['https://placehold.co/800x600/dc3545/FFFFFF?text=Poster'],
     timestamp: new Date('2025-09-27T20:00:00'),
   },
@@ -115,7 +108,7 @@ const BERITA: Berita[] = [
     id: 110,
     judul: 'Pemerintah Umumkan Kebijakan Baru Terkait Subsidi',
     foto_utama: 'https://placehold.co/600x400/6c757d/white?text=Politik',
-    idKategori: [5, 3],
+    idKategori: [4, 3], // BENAR: Politik & Ekonomi
     gambar_konten: [
       'https://placehold.co/800x600/6c757d/FFFFFF?text=Konferensi',
     ],
@@ -141,7 +134,7 @@ const BERITA: Berita[] = [
     id: 113,
     judul: 'Daftar Pemenang Festival Film Surabaya 2025',
     foto_utama: 'https://placehold.co/600x400/dc3545/white?text=Hiburan',
-    idKategori: [4],
+    idKategori: [5], // BENAR: Hiburan
     gambar_konten: ['https://placehold.co/800x600/dc3545/FFFFFF?text=Piala'],
     timestamp: new Date('2025-09-23T21:00:00'),
   },
@@ -184,6 +177,5 @@ export const getBeritaWithKategori = (): BeritaDetail[] => {
 };
 
 export const getBeritaByKategori = (idKategori: number): Berita[] => {
-  
   return BERITA.filter((berita) => berita.idKategori.includes(idKategori));
 };

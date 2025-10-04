@@ -19,15 +19,13 @@ const routes: Routes = [
   },
   {
     path: 'kategori',
-    loadChildren: () => import('./kategori/kategori.module').then( m => m.KategoriPageModule)
-  },
-  {
-    path: 'kategoripolitik',
-    loadChildren: () => import('./kategoripolitik/kategoripolitik.module').then( m => m.KategoripolitikPageModule)
+    loadChildren: () =>
+      import('./kategori/kategori.module').then((m) => m.KategoriPageModule),
   },
   {
     path: 'favoritku',
-    loadChildren: () => import('./favoritku/favoritku.module').then(m => m.FavoritkuPageModule)
+    loadChildren: () =>
+      import('./favoritku/favoritku.module').then((m) => m.FavoritkuPageModule),
   },
   {
     path: 'cari',
