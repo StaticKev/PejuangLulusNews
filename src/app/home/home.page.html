@@ -42,19 +42,22 @@
   <div class="berita-section">
     <h2>Berita Terbaru</h2>
     <ion-card
-      *ngFor="let berita of beritaTerbaru"
+      *ngFor="let berita of beritaTerbaru; let i = index"
       (click)="bacaBerita(berita.id)"
-      class="berita-card"
-    >
-      <img [src]="berita.foto_utama" class="berita-image" />
-      <ion-card-header>
-        <ion-card-subtitle>
-          <ion-chip color="primary" class="kategori-chip-kecil" outline="true">
-            <ion-label> {{ getNamaKategori(berita) }} </ion-label>
-          </ion-chip>
-        </ion-card-subtitle>
-        <ion-card-title>{{ berita.judul }}</ion-card-title>
-      </ion-card-header>
+      class="berita-card">
+        <div routerLink="/detailBerita/{{i}}/home">
+            <img [src]="berita.foto_utama" class="berita-image" />
+            <ion-card-header>
+                <ion-card-subtitle>
+                    <ion-chip color="primary" class="kategori-chip-kecil" outline="true">
+                        <ion-label>
+                            {{ getNamaKategori(berita) }}
+                        </ion-label>
+                    </ion-chip>
+                </ion-card-subtitle>
+                <ion-card-title>{{ berita.judul }}</ion-card-title>
+            </ion-card-header>
+        </div>
     </ion-card>
   </div>
 </ion-content>

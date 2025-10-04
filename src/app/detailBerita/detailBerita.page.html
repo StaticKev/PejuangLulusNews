@@ -1,0 +1,39 @@
+<ion-header class="ion-no-border">
+    <ion-toolbar>
+        <ion-title>
+            <!-- Logo Aplikasi Anda -->
+            <img
+            src="assets/icon/favicon.png"
+            alt="Logo"
+            style="height: 30px; vertical-align: middle; margin-right: 10px"
+            />
+            <b>Pejuang News</b>
+        </ion-title>
+        <ion-buttons slot="start" routerLink="/{{backTo}}">
+            <ion-button>
+                <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+    <ion-header collapse="condense">
+        <ion-toolbar>
+        <ion-title size="large">Detail Berita</ion-title>
+        </ion-toolbar>
+    </ion-header>
+    <ion-list>
+        <ion-item>
+            <ion-label>
+                <ion-text>&nbsp;&nbsp;<h1><b>{{semuaBerita[index].judul}}</b></h1></ion-text>
+                <ion-text [ngStyle]="{'color':'grey'}">&nbsp;&nbsp;<h3>{{semuaBerita[index].timestamp}}</h3><br></ion-text>
+            </ion-label>
+            <ion-button>
+                <ion-icon name="heart-outline"></ion-icon>
+            </ion-button>
+        </ion-item>
+        <ion-img [src]="semuaBerita[index].foto_utama"></ion-img>
+    </ion-list>
+
+</ion-content>

@@ -29,9 +29,12 @@ const routes: Routes = [
   },
   {
     path: 'cari',
-    loadChildren: () =>
-      import('./cari/cari.module').then((m) => m.CariPageModule),
+    loadChildren: () => import('./cari/cari.module').then( m => m.CariPageModule)
   },
+  {
+    path: 'detailBerita/:index/:backTo',
+    loadChildren: () => import('./detailBerita/detailBerita.module').then( m => m.DetailBeritaPageModule)
+  }
 ];
 
 @NgModule({
