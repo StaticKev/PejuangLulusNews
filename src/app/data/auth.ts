@@ -17,9 +17,9 @@ export class AuthService {
     );
 
     if (userFound) {
-        console.log("USER FOUND!")
-      localStorage.setItem(this.LOGGED_IN_KEY, 'true')
-      localStorage.setItem("loggedInUsername", userFound.username)
+      console.log('USER FOUND!');
+      localStorage.setItem(this.LOGGED_IN_KEY, 'true');
+      localStorage.setItem('loggedInUsername', userFound.username);
       return true;
     } else {
       return false;
@@ -27,18 +27,24 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem(this.LOGGED_IN_KEY);
-    localStorage.removeItem("loggedInUsername")
-    this.router.navigate(['/login']);
+    localStorage.clear();
+    console.log('All session data cleared');
+
+    this.router.navigate(['/login']).then(() => {
+      window.location.reload();
+    });
   }
 
   isLoggedIn(): boolean {
     return localStorage.getItem(this.LOGGED_IN_KEY) === 'true';
   }
 
-  checkLogin() {
+  checkLogin(): boolean {
     if (!this.isLoggedIn()) {
+      console.log('User not logged in, redirecting to login...');
       this.router.navigate(['/login']);
+      return false;
     }
+    return true;
   }
 }
