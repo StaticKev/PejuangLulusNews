@@ -1,0 +1,47 @@
+ion-content {
+    --background: #ffffff;
+    font-family: 'Times New Roman', Times, serif;
+    color: #222;
+    line-height: 1.6;
+}
+
+/* Header */
+ion-header ion-title b {
+    font-size: 20px;
+}
+
+/* Judul berita */
+h1 {
+    font-size: 40px;
+    font-weight: bold;
+    margin: 10px 0 6px 0;
+    text-align: left;
+    color: #000;
+}
+
+/* Tanggal berita */
+h3 {
+    font-size: 12px;
+    color: #888;
+    font-weight: normal;
+    margin: 0;
+    text-align: left;
+}
+
+ion-img {
+    display: block;
+    width: 70%;
+    max-width: 800px;
+    margin: 16px auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.isiBerita {
+    display: block;
+    text-align: justify;
+    text-indent: 2em;
+    font-size: 17px;
+    line-height: 1.8;
+    margin-top: 10px;
+}
