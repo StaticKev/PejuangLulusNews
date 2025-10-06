@@ -1,19 +1,17 @@
 <ion-header class="ion-no-border">
-    <ion-toolbar>
-        <ion-title>
-            <img
-            src="assets/icon/favicon.png"
-            alt="Logo"
-            style="height: 30px; vertical-align: middle; margin-right: 10px"
-            />
-            <b>Pejuang News</b>
-        </ion-title>
-        <ion-buttons slot="end">
-            <ion-button (click)="doLogout()">
-              <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
-            </ion-button>
-        </ion-buttons>
-    </ion-toolbar>
+  <ion-toolbar>
+    <ion-title>
+      <img src="assets/icon/favicon.png" alt="Logo" style="height: 30px; vertical-align: middle; margin-right: 10px" />
+      <b>Pejuang News</b>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="doLogout()">
+        <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-searchbar placeholder="Cari Berita Terkini!" (ionInput)="onSearchChange($event)"></ion-searchbar>
+
 </ion-header>
 
 <ion-content [fullscreen]="true">
@@ -24,4 +22,12 @@
   </ion-header>
 
   <app-explore-container name="Halaman Cari Berita"></app-explore-container>
+  
+  <ion-card *ngFor="let berita of hasilCari" routerLink="/detail-berita/{{berita.id}}">
+    <ion-img [src]="berita.foto_utama"></ion-img>
+    <ion-card-header>
+      <ion-card-title>{{ berita.judul }}</ion-card-title>
+    </ion-card-header>
+  </ion-card>
+
 </ion-content>
