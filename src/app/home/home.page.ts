@@ -25,7 +25,9 @@ export class HomePage implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private authService: AuthService
-  ) {
+  ) {}
+
+  ionViewWillEnter() {
     this.authService.checkLogin();
   }
 

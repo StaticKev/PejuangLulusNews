@@ -4,7 +4,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'login',
     pathMatch: 'full',
   },
   {
@@ -29,12 +29,16 @@ const routes: Routes = [
   },
   {
     path: 'cari',
-    loadChildren: () => import('./cari/cari.module').then( m => m.CariPageModule)
+    loadChildren: () =>
+      import('./cari/cari.module').then((m) => m.CariPageModule),
   },
   {
     path: 'detailBerita/:index/:backTo',
-    loadChildren: () => import('./detailBerita/detailBerita.module').then( m => m.DetailBeritaPageModule)
-  }
+    loadChildren: () =>
+      import('./detailBerita/detailBerita.module').then(
+        (m) => m.DetailBeritaPageModule
+      ),
+  },
 ];
 
 @NgModule({

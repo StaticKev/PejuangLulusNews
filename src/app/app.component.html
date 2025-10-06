@@ -1,23 +1,21 @@
 <ion-app>
-    <ion-router-outlet></ion-router-outlet>
-    <ion-tabs>
-        <ion-tab-bar slot="bottom">
+  <ion-router-outlet></ion-router-outlet>
+  <ion-tabs *ngIf="showTabBar">
+    <ion-tab-bar slot="bottom">
+      <ion-tab-button tab="cari" href="/cari">
+        <ion-icon name="search-outline"></ion-icon>
+        <ion-label>Cari Berita</ion-label>
+      </ion-tab-button>
 
-        <ion-tab-button tab="cari">
-            <ion-icon name="search-outline"></ion-icon>
-            <ion-label>Cari Berita</ion-label>
-        </ion-tab-button>
+      <ion-tab-button tab="home" href="/home">
+        <ion-icon name="home"></ion-icon>
+        <ion-label>Home</ion-label>
+      </ion-tab-button>
 
-        <ion-tab-button tab="home">
-            <ion-icon name="home"></ion-icon>
-            <ion-label>Home</ion-label>
-        </ion-tab-button>
-        
-        <ion-tab-button tab="favoritku">
-            <ion-icon name="heart-outline"></ion-icon>
-            <ion-label>Favoritku</ion-label>
-        </ion-tab-button>
-
-        </ion-tab-bar>
-    </ion-tabs>    
+      <ion-tab-button tab="favoritku" href="/favoritku">
+        <ion-icon name="heart-outline"></ion-icon>
+        <ion-label>Favoritku</ion-label>
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-tabs>
 </ion-app>
