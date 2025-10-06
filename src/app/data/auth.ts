@@ -17,7 +17,9 @@ export class AuthService {
     );
 
     if (userFound) {
-      localStorage.setItem(this.LOGGED_IN_KEY, 'true');
+        console.log("USER FOUND!")
+      localStorage.setItem(this.LOGGED_IN_KEY, 'true')
+      localStorage.setItem("loggedInUsername", userFound.username)
       return true;
     } else {
       return false;
@@ -26,6 +28,7 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem(this.LOGGED_IN_KEY);
+    localStorage.removeItem("loggedInUsername")
     this.router.navigate(['/login']);
   }
 
