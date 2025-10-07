@@ -1,43 +1,63 @@
 <ion-header class="ion-no-border">
-    <ion-toolbar>
-        <ion-title>
-            <img
-            src="assets/icon/favicon.png"
-            alt="Logo"
-            style="height: 30px; vertical-align: middle; margin-right: 10px"
-            />
-            <b>Pejuang News</b>
-        </ion-title>
-        <ion-buttons slot="end">
-            <ion-button (click)="doLogout()">
-              <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
-            </ion-button>
-          </ion-buttons>
-    </ion-toolbar>
+  <ion-toolbar>
+    <ion-title>
+      <ion-icon
+        name="heart"
+        color="danger"
+        style="vertical-align: middle; margin-right: 8px"
+      ></ion-icon>
+      <b>Berita Favorit</b>
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="doLogout()" fill="clear" color="medium">
+        <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-    <div class="berita-section">
-        <h2>Berita Terbaru</h2>
-        <ion-card
-          *ngFor="let berita of beritaFavorit; let i = index"
-          (click)="bacaBerita(berita.id)"
-          class="berita-card">
-            <div routerLink="/detailBerita/{{i}}/home">
-                <img [src]="berita.foto_utama" class="berita-image" />
-                <ion-card-header>
-                    <ion-card-subtitle>
-                        <ion-chip color="primary" class="kategori-chip-kecil" outline="true">
-                            <ion-label>
-                                {{ getNamaKategori(berita) }}
-                            </ion-label>
-                        </ion-chip>
-                    </ion-card-subtitle>
-                    <ion-card-title>{{ berita.judul }}</ion-card-title>
-                </ion-card-header>
-            </div>
-        </ion-card>
-      </div>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="welcome-section">
+    <h1>Berita Favoritku</h1>
+    <p>Semua berita yang Anda tandai sebagai favorit.</p>
+  </div>
 
-  <app-explore-container name="Halaman Favoritku"></app-explore-container>
+  <div class="berita-section">
+    <h2>Daftar Favorit</h2>
+
+    <ion-card
+      *ngFor="let berita of beritaFavorit"
+      routerLink="/detailBerita/{{berita.id}}/favorit"
+      class="berita-card compact-card"
+    >
+      <ion-item lines="none" detail="false">
+        <ion-thumbnail slot="start">
+          <img [src]="berita.foto_utama" class="berita-image-thumb" />
+        </ion-thumbnail>
+
+        <ion-label>
+          <ion-chip color="primary" class="kategori-chip-kecil" outline="true">
+            <ion-label>{{ getNamaKategori(berita) }}</ion-label>
+          </ion-chip>
+          <p class="berita-judul-kompak">{{ berita.judul }}</p>
+        </ion-label>
+
+        <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+      </ion-item>
+    </ion-card>
+
+    <div *ngIf="beritaFavorit.length === 0" class="empty-state">
+      <ion-icon
+        name="heart-dislike-outline"
+        color="medium"
+        style="font-size: 40px"
+      ></ion-icon>
+      <p>Anda belum menyimpan berita favorit apa pun.</p>
+    </div>
+
+    <div *ngIf="!loggedInUser" class="empty-state">
+      <p>Silakan login untuk melihat berita favorit Anda.</p>
+    </div>
+  </div>
 </ion-content>

@@ -1,43 +1,92 @@
 :root {
-  --ion-color-primary: #3880ff;
-  --ion-color-primary-shade: #3171e0;
+  --ion-color-primary: #007bff;
+  --ion-color-primary-shade: #0069d9;
   --ion-color-light-shade: #f4f5f8;
-}
-
-// ion-toolbar {
-//   --background: #ffffff;
-//   --color: #000000;
-// }
-
-.welcome-section {
-  h1 {
-    font-size: 1.8rem;
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-  p {
-    color: var(--ion-color-medium-shade);
-    font-size: 1rem;
-  }
+  --ion-color-medium-shade: #92949c;
+  --ion-color-dark: #121212;
+  --ion-color-step-50: #ffffff;
 }
 
 .kategori-section,
 .berita-section {
   margin-top: 24px;
-  h2 {
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin-bottom: 12px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.section-header h2 {
+  margin: 0;
+}
+.lihat-semua-text {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--ion-color-primary);
+}
+
+.berita-card.compact-card {
+  box-shadow: none;
+  border-radius: 0;
+  margin: 0;
+  border-bottom: 1px solid var(--ion-color-light-shade);
+  transition: background-color 0.2s;
+
+  &:hover {
+    transform: none;
+    box-shadow: none;
+    background-color: rgba(255, 255, 255, 0.05);
   }
 }
 
-.kategori-scroll {
-  display: flex;
-  overflow-x: auto;
-  padding-bottom: 10px;
-  &::-webkit-scrollbar {
-    display: none;
-  }
+.berita-card.compact-card ion-item {
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  --padding-end: 0;
+  min-height: 130px;
+  --background: transparent;
+}
+
+ion-thumbnail {
+  --size: 120px;
+  border-radius: 8px;
+  margin-right: 15px;
+}
+.berita-image-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.berita-judul-kompak {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-top: 4px;
+  margin-bottom: 0;
+  line-height: 1.3;
+  color: var(--ion-color-step-50);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.kategori-chip-kecil {
+  height: 20px;
+  font-size: 0.7rem;
+  margin: 0 0 5px 0;
+}
+
+ion-item ion-icon {
+  font-size: 1.2rem;
+  color: var(--ion-color-medium-shade);
+}
+
+ion-label {
+  white-space: normal;
 }
 
 ion-chip {
@@ -48,42 +97,5 @@ ion-chip {
     transform: translateY(-2px);
     background: var(--ion-color-primary);
     color: white;
-  }
-}
-
-.berita-card {
-  cursor: pointer;
-  margin: 0 0 20px 0; // Menghilangkan margin kiri-kanan default
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  border-radius: 16px;
-  transition: all 0.2s ease-in-out;
-
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-  }
-
-  .berita-image {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-    border-top-left-radius: 16px;
-    border-top-right-radius: 16px;
-  }
-
-  ion-card-header {
-    padding: 16px;
-  }
-
-  ion-card-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-top: 8px;
-    line-height: 1.4;
-  }
-
-  .kategori-chip-kecil {
-    height: 24px;
-    font-size: 0.75rem;
   }
 }

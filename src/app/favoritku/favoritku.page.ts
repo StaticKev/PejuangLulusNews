@@ -1,11 +1,8 @@
 import { AuthService } from '../data/auth';
 import { Router, ActivatedRoute } from '@angular/router';
-
-import { Component } from '@angular/core';
-
-import { Berita, BeritaDetail, getBeritaWithKategori } from '../data/berita';
-import { Kategori, getAllKategori } from '../data/kategori'
-
+import { Component, OnInit } from '@angular/core';
+import { BeritaDetail, getBeritaWithKategori } from '../data/berita';
+import { Kategori, getAllKategori } from '../data/kategori';
 import { User, getAllUsers } from '../data/user';
 
 @Component({
@@ -14,58 +11,63 @@ import { User, getAllUsers } from '../data/user';
   styleUrls: ['favoritku.page.scss'],
   standalone: false,
 })
-export class FavoritkuPage {
+export class FavoritkuPage implements OnInit {
+  public beritaFavorit: BeritaDetail[] = [];
+  public semuaKategori: Kategori[] = [];
+  public kategoriAktif: number | null = null;
+  public loggedInUser: User | null = null;
 
-    public beritaFavorit: Berita[] = []
-    public semuaKategori: Kategori[] = []
-    public kategoriAktif: number | null = null
-    
-    public index: number = 0;
-    backTo: string = ""
+  constructor(private router: Router, private authService: AuthService) {}
 
-    loggedInUser: User | null = null;
-    
-    constructor(private router: Router, private route: ActivatedRoute, private authService: AuthService) {
-        this.authService.checkLogin();
+  ngOnInit() {
+    this.semuaKategori = getAllKategori();
+    this.loadFavorit();
+  }
+
+  ionViewWillEnter() {
+    this.loadFavorit();
+  }
+
+  loadFavorit() {
+    this.beritaFavorit = [];
+    this.loggedInUser = null;
+
+    const loggedInUsername = localStorage.getItem('loggedInUsername');
+
+    for (const u of getAllUsers()) {
+      if (u.username === loggedInUsername) {
+        this.loggedInUser = u;
+        break;
+      }
     }
 
-    doLogout() {
-        this.authService.logout();
-    }
+    if (this.loggedInUser != null) {
+      const allBeritaWithKategori = getBeritaWithKategori();
+      const hasilFavorit: BeritaDetail[] = [];
 
-    ngOnInit() {
-        this.route.params.subscribe(
-            params => {
-                this.index = params['index']
-                this.backTo = params['backTo']
-            }
-        )
-
-        this.semuaKategori = getAllKategori()
-
-        for (const u of getAllUsers()) {
-            if (u.username == localStorage.getItem("loggedInUsername")) {
-                this.loggedInUser = u
-                break
-            }
+      for (const favorit of this.loggedInUser.favorit) {
+        const berita = allBeritaWithKategori.find((b) => b.id === favorit.id);
+        if (berita) {
+          hasilFavorit.push(berita);
         }
+      }
 
-        if (this.loggedInUser != null) {
-            this.beritaFavorit = this.loggedInUser?.favorit
-        }
+      this.beritaFavorit = hasilFavorit;
     }
+  }
 
-    getNamaKategori(berita: BeritaDetail): string {
-        if (this.kategoriAktif) {
-          const idx = berita.idKategori.indexOf(this.kategoriAktif);
-          if (idx !== -1) {
-            return berita.namaKategori[idx];
-          }
-        }
-        return berita.namaKategori[0];
-    }
-    bacaBerita(idBerita: number) {
-        this.router.navigate(['/baca-berita', idBerita]);
-    }
+  doLogout() {
+    this.authService.logout();
+  }
 
+  getNamaKategori(berita: BeritaDetail): string {
+    if (berita.namaKategori && berita.namaKategori.length > 0) {
+      return berita.namaKategori[0];
+    }
+    return 'Umum';
+  }
+
+  bacaBerita(idBerita: number) {
+    this.router.navigate(['/baca-berita', idBerita]);
+  }
 }

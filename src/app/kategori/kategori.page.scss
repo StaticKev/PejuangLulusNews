@@ -1,57 +1,104 @@
-/* kategori.page.scss atau kategori.page.css */
+ion-content {
+  --background: #000000 !important;
+
+  background: linear-gradient(
+    135deg,
+    var(--ion-color-dark) 0%,
+    var(--ion-color-darker) 100%
+  ) !important;
+}
+.kategori-card {
+  --background: #111111;
+}
+:root {
+  --ion-color-dark: #000000;
+  --ion-color-darker: #0a0a0a;
+  --ion-color-step-50: #ffffff;
+  --ion-color-step-100: #f0f0f0;
+}
+
+ion-content {
+  --background: var(--ion-color-dark);
+  --color: var(--ion-color-step-50);
+}
+
+ion-toolbar {
+  --background: transparent;
+  --color: var(--ion-color-step-50);
+  box-shadow: none;
+}
+
+.welcome-section {
+  h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--ion-color-step-50);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  p {
+    color: var(--ion-color-step-100);
+    font-size: 1rem;
+    margin-bottom: 20px;
+    opacity: 0.9;
+  }
+}
+
+.kategori-grid {
+  padding-top: 10px;
+}
+
+ion-col {
+  padding: 5px;
+}
 
 .kategori-card {
-    margin: 8px;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: transform 0.2s;
-    overflow: hidden; /* Penting untuk memastikan gambar tidak keluar dari rounded corner */
+  --background: #111111;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+  margin: 0;
+  height: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
 }
 
-.kategori-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-}
-
-.card-image-container {
-    /* Area gambar: Atur rasio aspek 1:1 */
-    /* Kita hapus background-color ungu di sini, karena gambar akan mengisi penuh */
-    /* background-color: #e6e0ff; */ 
-    padding-top: 100%; /* Membuat kotak menjadi persegi (tinggi = lebar) */
-    position: relative;
-    border-radius: 12px 12px 0 0; /* Corner atas saja */
+.card-icon-wrapper {
+  width: 70px;
+  height: 70px;
+  background: rgba(0, 123, 255, 0.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+  border: 2px solid var(--ion-color-primary);
 }
 
 .card-icon {
-    /* Posisi ikon di tengah area ungu */
-    position: absolute;
-    top: 0;   /* Ganti dari 50% menjadi 0 */
-    left: 0;  /* Ganti dari 50% menjadi 0 */
-    width: 100%; /* Membuat ikon mengisi lebar penuh container */
-    height: 100%; /* Membuat ikon mengisi tinggi penuh container */
-    object-fit: cover; /* **Penting:** Ini akan memotong gambar (crop) agar mengisi area 1x1 */
-    border-radius: inherit; /* Mewarisi border-radius dari parent (card) */
-    /* opacity: 0.7; Ini bisa dihapus jika tidak lagi diperlukan efek placeholder */
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
 }
 
-.card-label-item {
-    --padding-start: 0;
-    --inner-padding-end: 0;
+.kategori-nama-label {
+  padding: 0;
+  margin: 0;
 }
 
 .kategori-nama {
-    display: inline-block;
-    padding: 4px 10px;
-    background-color: #f0f0ff;
-    border-radius: 20px;
-    font-size: 0.9em;
-    font-weight: 500;
-    color: #6200EE;
-}
-
-.ion-text-center {
-    text-align: center !important;
-    width: 100%;
-    padding: 10px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ion-color-step-50);
 }

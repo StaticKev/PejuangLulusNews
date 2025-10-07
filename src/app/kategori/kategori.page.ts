@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { getAllKategori, Kategori } from '../data/kategori';
-import { CommonModule } from '@angular/common'; // Tambahkan CommonModule jika hilang
-import { FormsModule } from '@angular/forms'; // Tambahkan FormsModule jika hilang
-import { IonicModule } from '@ionic/angular'; // Tambahkan IonicModule jika hilang
 
 @Component({
   standalone: false,

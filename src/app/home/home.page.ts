@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, RouterModule } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
-
 import { BeritaDetail, getBeritaWithKategori } from '../data/berita';
+import { getAllUsers, User } from '../data/user';
 import { Kategori, getAllKategori } from '../data/kategori';
 import { AuthService } from '../data/auth';
+import { RouterModule } from '@angular/router';
+import { getAllRating } from '../data/rating';
 
 @Component({
   selector: 'app-home',
@@ -17,16 +19,20 @@ import { AuthService } from '../data/auth';
 export class HomePage implements OnInit {
   public semuaBerita: BeritaDetail[] = [];
   public beritaTerbaru: BeritaDetail[] = [];
+  public beritaTerbaruDenganRating: (BeritaDetail & { avgRating: number })[] =
+    [];
   public semuaKategori: Kategori[] = [];
   public kategoriAktif: number | null = null;
-  public namaUser: string = 'Pejuang Lulus';
+  public namaUser: string = '';
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private authService: AuthService
-  ) {
-    this.authService.checkLogin();
+  ) {}
+
+  ionViewWillEnter() {
+    this.loadUserName();
   }
 
   ngOnInit() {
@@ -34,6 +40,8 @@ export class HomePage implements OnInit {
     this.semuaBerita = getBeritaWithKategori().sort(
       (a, b) => b.timestamp.getTime() - a.timestamp.getTime()
     );
+
+    this.processBeritaWithRating(this.semuaBerita);
 
     this.route.queryParams.subscribe((params) => {
       const namaKategoriDariUrl = params['kategori'];
@@ -54,6 +62,34 @@ export class HomePage implements OnInit {
     });
   }
 
+  // 🚨 Method baru untuk memproses berita dan menambahkan avgRating
+  private processBeritaWithRating(beritaArray: BeritaDetail[]) {
+    this.beritaTerbaruDenganRating = beritaArray.map((berita) => {
+      // Hitung rating rata-rata untuk setiap berita
+      const avgRating = this.getAverageRating(berita.id);
+
+      // Kembalikan objek berita baru dengan properti avgRating tambahan
+      // Ini adalah teknik type casting yang aman (BeritaDetail & { avgRating: number })
+      return {
+        ...berita,
+        avgRating: avgRating,
+      } as BeritaDetail & { avgRating: number };
+    });
+  }
+
+  // 🚨 Method baru: Menghitung rating rata-rata dari data global
+  getAverageRating(beritaId: number): number {
+    const ratings = getAllRating().filter((r) => r.berita.id === beritaId);
+
+    if (ratings.length === 0) {
+      return 0;
+    }
+
+    const totalNilai = ratings.reduce((sum, r) => sum + r.nilai, 0);
+    // Kembalikan rata-rata dengan satu desimal
+    return parseFloat((totalNilai / ratings.length).toFixed(1));
+  }
+
   lihatKategori(idKategori: number) {
     if (this.kategoriAktif === idKategori) {
       this.router.navigate(['/home']);
@@ -69,17 +105,17 @@ export class HomePage implements OnInit {
 
   private applyFilter(idKategori: number | null) {
     this.kategoriAktif = idKategori;
+    let filteredBerita: BeritaDetail[];
+
     if (idKategori === null) {
-      this.beritaTerbaru = [...this.semuaBerita];
+      filteredBerita = [...this.semuaBerita];
     } else {
-      this.beritaTerbaru = this.semuaBerita.filter((berita) =>
+      filteredBerita = this.semuaBerita.filter((berita) =>
         berita.idKategori.includes(idKategori)
       );
     }
-  }
 
-  bacaBerita(idBerita: number) {
-    this.router.navigate(['/baca-berita', idBerita]);
+    this.processBeritaWithRating(filteredBerita);
   }
 
   getNamaKategori(berita: BeritaDetail): string {
@@ -92,7 +128,33 @@ export class HomePage implements OnInit {
     return berita.namaKategori[0];
   }
 
-  doLogout() {
-    this.authService.logout();
+  loadUserName() {
+    const username = localStorage.getItem('loggedInUsername');
+    if (username) {
+      const user = getAllUsers().find((u) => u.username === username);
+      this.namaUser = username;
+    }
+  }
+
+  async doLogout() {
+    const alert = document.createElement('ion-alert');
+    alert.header = 'Konfirmasi';
+    alert.message = 'Apakah Anda yakin ingin keluar?';
+    alert.buttons = [
+      {
+        text: 'Batal',
+        role: 'cancel',
+      },
+      {
+        text: 'Ya, Keluar',
+        role: 'confirm',
+        handler: () => {
+          this.authService.logout();
+        },
+      },
+    ];
+
+    document.body.appendChild(alert);
+    await alert.present();
   }
 }

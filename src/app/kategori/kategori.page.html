@@ -1,11 +1,28 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>Daftar Kategori</ion-title>
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>
+      <img
+        src="assets/icon/favicon.png"
+        alt="Logo"
+        style="height: 30px; vertical-align: middle; margin-right: 10px"
+      />
+      <b>Pejuang News</b>
+    </ion-title>
+    <ion-buttons slot="start">
+      <ion-button routerLink="/home" fill="clear" color="medium">
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <ion-grid>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="welcome-section">
+    <h1>Semua Kategori</h1>
+    <p>Jelajahi berita berdasarkan topik favorit Anda.</p>
+  </div>
+
+  <ion-grid class="kategori-grid">
     <ion-row>
       <ion-col
         size="6"
@@ -13,15 +30,13 @@
         (click)="goToBeritaByKategori(k.id)"
       >
         <ion-card class="kategori-card">
-          <div class="card-image-container">
+          <div class="card-icon-wrapper">
             <img [src]="k.icon" alt="icon kategori" class="card-icon" />
           </div>
 
-          <ion-item lines="none" class="card-label-item">
-            <ion-label class="ion-text-center">
-              <span class="kategori-nama">{{ k.nama }}</span>
-            </ion-label>
-          </ion-item>
+          <ion-label class="kategori-nama-label">
+            <span class="kategori-nama">{{ k.nama }}</span>
+          </ion-label>
         </ion-card>
       </ion-col>
     </ion-row>

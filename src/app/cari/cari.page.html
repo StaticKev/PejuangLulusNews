@@ -1,19 +1,23 @@
 <ion-header class="ion-no-border">
-    <ion-toolbar>
-        <ion-title>
-            <img
-            src="assets/icon/favicon.png"
-            alt="Logo"
-            style="height: 30px; vertical-align: middle; margin-right: 10px"
-            />
-            <b>Pejuang News</b>
-        </ion-title>
-        <ion-buttons slot="end">
-            <ion-button (click)="doLogout()">
-              <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
-            </ion-button>
-        </ion-buttons>
-    </ion-toolbar>
+  <ion-toolbar>
+    <ion-title>
+      <img
+        src="assets/icon/favicon.png"
+        alt="Logo"
+        style="height: 30px; vertical-align: middle; margin-right: 10px"
+      />
+      <b>Pejuang News</b>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="doLogout()" fill="clear" color="medium">
+        <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-searchbar
+    placeholder="Cari Berita Terkini!"
+    (ionInput)="onSearchChange($event)"
+  ></ion-searchbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
@@ -23,5 +27,52 @@
     </ion-toolbar>
   </ion-header>
 
-  <app-explore-container name="Halaman Cari Berita"></app-explore-container>
+  <div class="berita-section ion-padding-horizontal">
+    <h2>Hasil Pencarian</h2>
+
+    <ion-card
+      *ngFor="let berita of hasilCari"
+      routerLink="/detailBerita/{{berita.id}}/cari"
+      class="berita-card compact-card"
+    >
+      <ion-item lines="none" detail="false">
+        <ion-thumbnail slot="start">
+          <img [src]="berita.foto_utama" class="berita-image-thumb" />
+        </ion-thumbnail>
+
+        <ion-label>
+          <div class="chip-row">
+            <ion-chip
+              color="primary"
+              class="kategori-chip-kecil"
+              outline="true"
+            >
+              <ion-label>{{ getNamaKategori(berita) }}</ion-label>
+            </ion-chip>
+
+            <ion-chip color="warning" class="rating-chip-kecil">
+              <ion-icon name="star" style="font-size: 14px"></ion-icon>
+              <ion-label style="font-size: 0.75rem"
+                >{{ getAverageRating(berita.id) | number:'1.1-1' }}</ion-label
+              >
+            </ion-chip>
+          </div>
+
+          <p class="berita-judul-kompak">{{ berita.judul }}</p>
+        </ion-label>
+
+        <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+      </ion-item>
+    </ion-card>
+
+    <div
+      *ngIf="!hasilCari || hasilCari.length === 0"
+      class="empty-state ion-padding"
+    >
+      <p>
+        Masukkan kata kunci untuk memulai pencarian atau tidak ada berita yang
+        ditemukan.
+      </p>
+    </div>
+  </div>
 </ion-content>
