@@ -25,6 +25,7 @@ export class DetailBerita {
   currentBerita: BeritaDetail | undefined;
 
   loggedInUser: User | null = null;
+  tempKomentar: string = "";
 
   constructor(private route: ActivatedRoute, private router: Router) {}
 
@@ -118,25 +119,39 @@ export class DetailBerita {
     updateRatingArray(ratings);
   }
 
-  updateFavorite() {
-    this.isFavorite = !this.isFavorite;
+    updateFavorite() {
+        this.isFavorite = !this.isFavorite;
 
-    if (!this.currentBerita || !this.loggedInUser) return;
+        if (!this.currentBerita || !this.loggedInUser) return;
 
-    if (this.isFavorite) {
-      this.loggedInUser.favorit.push(this.currentBerita);
-    } else {
-      const idx = this.loggedInUser.favorit.findIndex(
-        (f) => f.id === this.currentBerita!.id
-      );
+        if (this.isFavorite) {
+        this.loggedInUser.favorit.push(this.currentBerita);
+        } else {
+        const idx = this.loggedInUser.favorit.findIndex(
+            (f) => f.id === this.currentBerita!.id
+        );
 
-      if (idx > -1) {
-        this.loggedInUser.favorit.splice(idx, 1);
-      }
+        if (idx > -1) {
+            this.loggedInUser.favorit.splice(idx, 1);
+        }
+        }
+
+        if (this.loggedInUser) {
+        updateUser(this.loggedInUser);
+        }
     }
 
-    if (this.loggedInUser) {
-      updateUser(this.loggedInUser);
+    tambahKomentar() {
+        console.log(this.tempKomentar)
+        if (this.loggedInUser != null) {
+            this.currentBerita?.komentar.push(
+                {
+                    user: this.loggedInUser,
+                    komentar: this.tempKomentar,
+                    timestamp: new Date()
+                }
+            )
+        }
+        this.tempKomentar = ""
     }
-  }
 }

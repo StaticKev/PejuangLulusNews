@@ -1,67 +1,89 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar>
-    <ion-title>
-      <img
-        src="assets/icon/favicon.png"
-        alt="Logo"
-        style="height: 30px; vertical-align: middle; margin-right: 10px"
-      />
-      <b>Pejuang News</b>
-    </ion-title>
-    <ion-buttons slot="start" [routerLink]="['/', backTo]">
-      <ion-button>
-        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-title>
+            <img
+                src="assets/icon/favicon.png"
+                alt="Logo"
+                style="height: 30px; vertical-align: middle; margin-right: 10px"
+            />
+            <b>Pejuang News</b>
+        </ion-title>
+        <ion-buttons slot="start" [routerLink]="['/', backTo]">
+            <ion-button>
+                <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Detail Berita</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-list lines="none">
-    <ion-item>
-      <ion-label>
-        <h1><b>{{ currentBerita?.judul }}</b></h1>
-        <h3 class="ion-text-medium ion-padding-top">
-          {{ currentBerita?.timestamp }}
-        </h3>
-      </ion-label>
-      <ion-button (click)="updateFavorite()">
-        <ion-icon
-          slot="icon-only"
-          [name]="isFavorite ? 'heart-dislike-outline' : 'heart-outline'"
-        ></ion-icon>
-      </ion-button>
-    </ion-item>
+    <ion-header collapse="condense">
+        <ion-toolbar>
+        <ion-title size="large">Detail Berita</ion-title>
+        </ion-toolbar>
+    </ion-header>
+    <ion-list lines="none">
+        <ion-item>
+            <ion-label>
+                <h1><b>{{ currentBerita?.judul }}</b></h1>
+                <h3 class="ion-text-medium ion-padding-top">
+                {{ currentBerita?.timestamp }}
+                </h3>
+            </ion-label>
+            <ion-button (click)="updateFavorite()">
+                <ion-icon
+                slot="icon-only"
+                [name]="isFavorite ? 'heart-dislike-outline' : 'heart-outline'"
+                ></ion-icon>
+            </ion-button>
+        </ion-item>
 
-    <ion-img [src]="currentBerita?.foto_utama" class="foto-utama"></ion-img>
+        <ion-img [src]="currentBerita?.foto_utama" class="foto-utama"></ion-img>
 
-    <ion-grid *ngIf="currentBerita?.gambar_konten?.length">
-      <ion-row>
-        <ion-col size="6" *ngFor="let gambar of currentBerita?.gambar_konten">
-          <ion-img [src]="gambar" class="gambar-konten-grid"></ion-img>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+        <ion-grid *ngIf="currentBerita?.gambar_konten?.length">
+            <ion-row>
+                <ion-col size="6" *ngFor="let gambar of currentBerita?.gambar_konten">
+                <ion-img [src]="gambar" class="gambar-konten-grid"></ion-img>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
 
-    <ion-label class="isiBerita ion-padding-horizontal ion-padding-vertical"
-      >{{ currentBerita?.isi }}</ion-label
-    >
+        <ion-label class="isiBerita ion-padding-horizontal ion-padding-vertical"
+        >{{ currentBerita?.isi }}</ion-label>
 
-    <ion-item class="rating-container ion-padding-vertical">
-      <ion-label>Berikan Rating Anda:</ion-label>
-      <div class="stars">
-        <ion-icon
-          *ngFor="let star of [1, 2, 3, 4, 5]"
-          [name]="star <= userRating ? 'star' : 'star-outline'"
-          (click)="rateNews(star)"
-          [color]="star <= userRating ? 'warning' : 'medium'"
-        ></ion-icon>
-      </div>
-    </ion-item>
-  </ion-list>
+        <ion-item class="rating-container ion-padding-vertical">
+        <ion-label>Berikan Rating Anda:</ion-label>
+            <div class="stars">
+                <ion-icon
+                *ngFor="let star of [1, 2, 3, 4, 5]"
+                [name]="star <= userRating ? 'star' : 'star-outline'"
+                (click)="rateNews(star)"
+                [color]="star <= userRating ? 'warning' : 'medium'"
+                ></ion-icon>
+            </div>
+        </ion-item>
+        
+        <ion-item>
+            <ion-label>
+                <h1><b>Komentar</b></h1>
+            </ion-label> 
+        </ion-item>
+
+        <ion-item *ngFor="let komentar of currentBerita?.komentar">
+            <ion-text><b>{{komentar.user.username}}</b></ion-text>
+            <ion-text [ngStyle]="{ 'color': 'grey' }">&nbsp;{{komentar.komentar}}</ion-text>
+        </ion-item>
+
+        <ion-item>
+            <ion-input 
+            type="text"
+            placeholder="Tulis komentar anda di sini..." 
+            [(ngModel)]="tempKomentar"></ion-input>
+            <ion-button (click)="tambahKomentar()"> 
+                <ion-icon name="send-outline"></ion-icon>
+            </ion-button>
+        </ion-item>
+
+        <ion-item><br><br></ion-item>
+    </ion-list>
 </ion-content>
