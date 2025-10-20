@@ -64,7 +64,6 @@ export class HomePage implements OnInit {
 
   private processBeritaWithRating(beritaArray: BeritaDetail[]) {
     this.beritaTerbaruDenganRating = beritaArray.map((berita) => {
-      // Hitung rating rata-rata untuk setiap berita
       const avgRating = this.getAverageRating(berita.id);
 
       return {
@@ -82,7 +81,6 @@ export class HomePage implements OnInit {
     }
 
     const totalNilai = ratings.reduce((sum, r) => sum + r.nilai, 0);
-    // Kembalikan rata-rata dengan satu desimal
     return parseFloat((totalNilai / ratings.length).toFixed(1));
   }
 
