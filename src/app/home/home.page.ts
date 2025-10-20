@@ -62,14 +62,11 @@ export class HomePage implements OnInit {
     });
   }
 
-  // 🚨 Method baru untuk memproses berita dan menambahkan avgRating
   private processBeritaWithRating(beritaArray: BeritaDetail[]) {
     this.beritaTerbaruDenganRating = beritaArray.map((berita) => {
       // Hitung rating rata-rata untuk setiap berita
       const avgRating = this.getAverageRating(berita.id);
 
-      // Kembalikan objek berita baru dengan properti avgRating tambahan
-      // Ini adalah teknik type casting yang aman (BeritaDetail & { avgRating: number })
       return {
         ...berita,
         avgRating: avgRating,
@@ -77,7 +74,6 @@ export class HomePage implements OnInit {
     });
   }
 
-  // 🚨 Method baru: Menghitung rating rata-rata dari data global
   getAverageRating(beritaId: number): number {
     const ratings = getAllRating().filter((r) => r.berita.id === beritaId);
 
