@@ -34,21 +34,32 @@ export class CariPage implements OnInit {
   onSearchChange(event: any) {
     const value = event.detail.value.toLowerCase();
 
+    this.hasilCari.forEach(berita => {
+        berita.kalimat = ""
+    });
+
     clearTimeout(this.timeout);
 
     this.timeout = setTimeout(() => {
-      if (value.trim() === '') {
         this.hasilCari = [];
-        return;
-      }
 
-      this.hasilCari = this.semuaBerita.filter(
-        (berita) =>
-          berita.judul.toLowerCase().includes(value) ||
-          berita.isi.toLowerCase().includes(value)
-      ) as BeritaDetail[];
-    }, 500);
-  }
+        const regex = new RegExp(`\\b${value}\\b`, "i");
+
+        this.semuaBerita.forEach(berita => {
+            if (berita.judul.toLowerCase().includes(value)) {
+                this.hasilCari.push(berita)
+            } else if (regex.test(berita.isi.toLowerCase())) {
+                const kalimat: string[] = berita.isi.split('.')
+                kalimat.forEach(k => {
+                    if (regex.test(k)) {
+                        berita.kalimat = k
+                    }
+                });
+                this.hasilCari.push(berita)
+            }
+        });
+        }, 500);
+    }
 
   getNamaKategori(berita: BeritaDetail): string {
     if (berita.namaKategori && berita.namaKategori.length > 0) {

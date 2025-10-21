@@ -35,34 +35,36 @@
       routerLink="/detailBerita/{{berita.id}}/cari"
       class="berita-card compact-card"
     >
-      <ion-item lines="none" detail="false">
-        <ion-thumbnail slot="start">
-          <img [src]="berita.foto_utama" class="berita-image-thumb" />
-        </ion-thumbnail>
+        <ion-item lines="none" detail="false">
+            <ion-thumbnail slot="start">
+            <img [src]="berita.foto_utama" class="berita-image-thumb" />
+            </ion-thumbnail>
 
-        <ion-label>
-          <div class="chip-row">
+            <ion-label>
+            <p class="berita-judul-kompak">{{ berita.judul }}</p>
+            <h6 
+                *ngIf="berita.kalimat != ''"
+                [ngStyle]="{ 'color': '#888', 'font-size': '0.9rem' }"
+            ><br>{{ berita.kalimat }}</h6>
+            </ion-label>
+
             <ion-chip
-              color="primary"
-              class="kategori-chip-kecil"
-              outline="true"
+                color="primary"
+                class="kategori-chip-kecil"
+                outline="true"
             >
-              <ion-label>{{ getNamaKategori(berita) }}</ion-label>
+                <ion-label>{{ getNamaKategori(berita) }}</ion-label>
             </ion-chip>
 
             <ion-chip color="warning" class="rating-chip-kecil">
-              <ion-icon name="star" style="font-size: 14px"></ion-icon>
-              <ion-label style="font-size: 0.75rem"
-                >{{ getAverageRating(berita.id) | number:'1.1-1' }}</ion-label
-              >
+                <ion-icon name="star" style="font-size: 14px"></ion-icon>
+                <ion-label style="font-size: 0.75rem">
+                    {{ getAverageRating(berita.id) | number:'1.1-1' }}
+                </ion-label>
             </ion-chip>
-          </div>
 
-          <p class="berita-judul-kompak">{{ berita.judul }}</p>
-        </ion-label>
-
-        <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
-      </ion-item>
+            <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+        </ion-item>
     </ion-card>
 
     <div
