@@ -78,13 +78,10 @@
       </ion-label>
     </ion-item>
 
-    <!-- KOMENTAR (DENGAN REKURSIF) -->
 <ion-list lines="none">
-  <!-- komentar level 0 -->
   <ng-container *ngTemplateOutlet="tampilKomentar; context: { list: currentBerita?.komentar }"></ng-container>
 </ion-list>
 
-<!-- TEMPLATE REKURSIF UNTUK SEMUA LEVEL -->
 <ng-template #tampilKomentar let-list="list">
   <ion-item *ngFor="let komentar of list" class="ion-padding-start">
     <ion-grid>
@@ -108,7 +105,6 @@
         </ion-col>
       </ion-row>
 
-      <!-- FORM BALASAN -->
       <ion-row *ngIf="komentar.showReplyBox">
         <ion-col size="10">
           <ion-input
@@ -124,7 +120,6 @@
         </ion-col>
       </ion-row>
 
-      <!-- BALASAN (REKURSIF) -->
       <ion-row *ngIf="komentar.replies && komentar.replies.length" class="ion-padding-start">
         <ion-col size="12">
           <ng-container *ngTemplateOutlet="tampilKomentar; context: { list: komentar.replies }"></ng-container>
@@ -134,7 +129,6 @@
   </ion-item>
 </ng-template>
 
-<!-- INPUT KOMENTAR BARU -->
 <ion-item>
   <ion-input
     type="text"

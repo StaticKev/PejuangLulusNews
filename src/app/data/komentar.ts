@@ -5,7 +5,7 @@ export interface Komentar {
     komentar: string
     timestamp: Date;
 
-    replies?: Komentar[];      // list balasan (nested)
-  showReplyBox?: boolean;    // untuk toggle input balasan
+    replies?: Komentar[];      
+  showReplyBox?: boolean;    
   tempReply?: string;        
 }
