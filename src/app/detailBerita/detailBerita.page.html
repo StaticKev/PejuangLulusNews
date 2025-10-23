@@ -1,89 +1,146 @@
 <ion-header class="ion-no-border">
-    <ion-toolbar>
-        <ion-title>
-            <img
-                src="assets/icon/favicon.png"
-                alt="Logo"
-                style="height: 30px; vertical-align: middle; margin-right: 10px"
-            />
-            <b>Pejuang News</b>
-        </ion-title>
-        <ion-buttons slot="start" [routerLink]="['/', backTo]">
-            <ion-button>
-                <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
-            </ion-button>
-        </ion-buttons>
-    </ion-toolbar>
+  <ion-toolbar>
+    <ion-title>
+      <img
+        src="assets/icon/favicon.png"
+        alt="Logo"
+        style="height: 30px; vertical-align: middle; margin-right: 10px"
+      />
+      <b>Pejuang News</b>
+    </ion-title>
+    <ion-buttons slot="start" [routerLink]="['/', backTo]">
+      <ion-button>
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-    <ion-header collapse="condense">
-        <ion-toolbar>
-        <ion-title size="large">Detail Berita</ion-title>
-        </ion-toolbar>
-    </ion-header>
-    <ion-list lines="none">
-        <ion-item>
-            <ion-label>
-                <h1><b>{{ currentBerita?.judul }}</b></h1>
-                <h3 class="ion-text-medium ion-padding-top">
-                {{ currentBerita?.timestamp }}
-                </h3>
-            </ion-label>
-            <ion-button (click)="updateFavorite()">
-                <ion-icon
-                slot="icon-only"
-                [name]="isFavorite ? 'heart-dislike-outline' : 'heart-outline'"
-                ></ion-icon>
-            </ion-button>
-        </ion-item>
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Detail Berita</ion-title>
+    </ion-toolbar>
+  </ion-header>
 
-        <ion-img [src]="currentBerita?.foto_utama" class="foto-utama"></ion-img>
+  <ion-list lines="none">
+    <!-- HEADER BERITA -->
+    <ion-item>
+      <ion-label>
+        <h1><b>{{ currentBerita?.judul }}</b></h1>
+        <h3 class="ion-text-medium ion-padding-top">
+          {{ currentBerita?.timestamp | date: 'medium' }}
+        </h3>
+      </ion-label>
+      <ion-button (click)="updateFavorite()">
+        <ion-icon
+          slot="icon-only"
+          [name]="isFavorite ? 'heart' : 'heart-outline'"
+          color="danger"
+        ></ion-icon>
+      </ion-button>
+    </ion-item>
 
-        <ion-grid *ngIf="currentBerita?.gambar_konten?.length">
-            <ion-row>
-                <ion-col size="6" *ngFor="let gambar of currentBerita?.gambar_konten">
-                <ion-img [src]="gambar" class="gambar-konten-grid"></ion-img>
-                </ion-col>
-            </ion-row>
-        </ion-grid>
+    <!-- FOTO UTAMA -->
+    <ion-img [src]="currentBerita?.foto_utama" class="foto-utama"></ion-img>
 
-        <ion-label class="isiBerita ion-padding-horizontal ion-padding-vertical"
-        >{{ currentBerita?.isi }}</ion-label>
+    <!-- GAMBAR KONTEN -->
+    <ion-grid *ngIf="currentBerita?.gambar_konten?.length">
+      <ion-row>
+        <ion-col size="6" *ngFor="let gambar of currentBerita?.gambar_konten">
+          <ion-img [src]="gambar" class="gambar-konten-grid"></ion-img>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
 
-        <ion-item class="rating-container ion-padding-vertical">
-        <ion-label>Berikan Rating Anda:</ion-label>
-            <div class="stars">
-                <ion-icon
-                *ngFor="let star of [1, 2, 3, 4, 5]"
-                [name]="star <= userRating ? 'star' : 'star-outline'"
-                (click)="rateNews(star)"
-                [color]="star <= userRating ? 'warning' : 'medium'"
-                ></ion-icon>
-            </div>
-        </ion-item>
-        
-        <ion-item>
-            <ion-label>
-                <h1><b>Komentar</b></h1>
-            </ion-label> 
-        </ion-item>
+    <!-- ISI BERITA -->
+    <ion-label class="isiBerita ion-padding-horizontal ion-padding-vertical">
+      {{ currentBerita?.isi }}
+    </ion-label>
 
-        <ion-item *ngFor="let komentar of currentBerita?.komentar">
-            <ion-text><b>{{komentar.user.username}}</b></ion-text>
-            <ion-text [ngStyle]="{ 'color': 'grey' }">&nbsp;{{komentar.komentar}}</ion-text>
-        </ion-item>
+    <!-- RATING -->
+    <ion-item class="rating-container ion-padding-vertical">
+      <ion-label>Berikan Rating Anda:</ion-label>
+      <div class="stars">
+        <ion-icon
+          *ngFor="let star of [1, 2, 3, 4, 5]"
+          [name]="star <= userRating ? 'star' : 'star-outline'"
+          (click)="rateNews(star)"
+          [color]="star <= userRating ? 'warning' : 'medium'"
+        ></ion-icon>
+      </div>
+    </ion-item>
 
-        <ion-item>
-            <ion-input 
+    <!-- KOMENTAR -->
+    <ion-item>
+      <ion-label>
+        <h1><b>Komentar</b></h1>
+      </ion-label>
+    </ion-item>
+
+<ion-list lines="none">
+  <ng-container *ngTemplateOutlet="tampilKomentar; context: { list: currentBerita?.komentar }"></ng-container>
+</ion-list>
+
+<ng-template #tampilKomentar let-list="list">
+  <ion-item *ngFor="let komentar of list" class="ion-padding-start">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-text><b>{{ komentar.user.username }}</b></ion-text>
+          <ion-text color="medium"> — {{ komentar.komentar }}</ion-text>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="12">
+          <ion-button
+            fill="clear"
+            size="small"
+            color="primary"
+            (click)="toggleReplyBox(komentar)"
+          >
+            Balas
+          </ion-button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row *ngIf="komentar.showReplyBox">
+        <ion-col size="10">
+          <ion-input
             type="text"
-            placeholder="Tulis komentar anda di sini..." 
-            [(ngModel)]="tempKomentar"></ion-input>
-            <ion-button (click)="tambahKomentar()"> 
-                <ion-icon name="send-outline"></ion-icon>
-            </ion-button>
-        </ion-item>
+            placeholder="Tulis balasan..."
+            [(ngModel)]="komentar.tempReply"
+          ></ion-input>
+        </ion-col>
+        <ion-col size="2">
+          <ion-button size="small" (click)="tambahBalasan(komentar)">
+            <ion-icon name="send-outline"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
 
-        <ion-item><br><br></ion-item>
-    </ion-list>
+      <ion-row *ngIf="komentar.replies && komentar.replies.length" class="ion-padding-start">
+        <ion-col size="12">
+          <ng-container *ngTemplateOutlet="tampilKomentar; context: { list: komentar.replies }"></ng-container>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-item>
+</ng-template>
+
+<ion-item>
+  <ion-input
+    type="text"
+    placeholder="Tulis komentar anda di sini..."
+    [(ngModel)]="tempKomentar"
+  ></ion-input>
+  <ion-button (click)="tambahKomentar()">
+    <ion-icon name="send-outline"></ion-icon>
+  </ion-button>
+</ion-item>
+
+
+    <ion-item><br /><br /></ion-item>
+  </ion-list>
 </ion-content>
