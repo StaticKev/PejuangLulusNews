@@ -229,3 +229,13 @@ export const getBeritaWithKategori = (): BeritaDetail[] => {
 export const getBeritaByKategori = (idKategori: number): Berita[] => {
   return BERITA.filter((berita) => berita.idKategori.includes(idKategori));
 };
+
+// Menambahkan fungsi untuk menambah berita baru ke array BERITA
+export const addBerita = (berita: Berita): void => {
+    // Pastikan id unik jika tidak diset oleh pemanggil
+    const maxId = BERITA.reduce((m, b) => (b.id > m ? b.id : m), 0);
+    if (!berita.id || berita.id <= maxId) {
+        berita.id = maxId + 1;
+    }
+    BERITA.push(berita);
+};

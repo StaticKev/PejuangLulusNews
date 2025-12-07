@@ -33,6 +33,7 @@ export class HomePage implements OnInit {
 
   ionViewWillEnter() {
     this.loadUserName();
+    this.refreshBerita();
   }
 
   ngOnInit() {
@@ -60,6 +61,21 @@ export class HomePage implements OnInit {
         this.applyFilter(null);
       }
     });
+  }
+
+  private refreshBerita() {
+    // reload latest berita from data source
+    this.semuaKategori = getAllKategori();
+    this.semuaBerita = getBeritaWithKategori().sort(
+      (a, b) => b.timestamp.getTime() - a.timestamp.getTime()
+    );
+
+    // Reapply current filter if any
+    if (this.kategoriAktif) {
+      this.applyFilter(this.kategoriAktif);
+    } else {
+      this.processBeritaWithRating(this.semuaBerita);
+    }
   }
 
   private processBeritaWithRating(beritaArray: BeritaDetail[]) {

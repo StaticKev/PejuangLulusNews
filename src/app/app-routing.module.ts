@@ -47,6 +47,14 @@ const routes: Routes = [
       ),
     canActivate: [AuthGuard],
   },
+  {
+    path: 'tambah-berita',
+    loadChildren: () =>
+      import('./tambah-berita/tambah-berita.module').then(
+        (m) => m.TambahBeritaModule
+      ),
+    canActivate: [AuthGuard],
+  },
 ];
 
 @NgModule({

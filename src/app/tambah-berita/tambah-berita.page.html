@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Tambah Berita</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="form" (ngSubmit)="submit()" class="ion-padding">
+    <ion-item>
+      <ion-label position="stacked">Judul</ion-label>
+      <ion-input formControlName="judul" placeholder="Masukan judul"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Tanggal (contoh: 28 Sep 2025, 10:30:00AM)</ion-label>
+      <ion-input formControlName="tanggal" placeholder="28 Sep 2025, 10:30:00AM"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Foto Utama (URL)</ion-label>
+      <ion-input formControlName="foto_utama" placeholder="https://..."></ion-input>
+    </ion-item>
+
+    <div class="gambar-list">
+      <label class="ion-padding-start">Gambar Konten (bisa banyak)</label>
+      <div *ngFor="let ctrl of gambarKontenControls; let i = index" class="ion-padding">
+        <ion-item>
+          <ion-input [formControl]="ctrl" placeholder="URL Gambar"></ion-input>
+          <ion-button fill="clear" color="danger" (click)="removeGambar(i)">Hapus</ion-button>
+        </ion-item>
+      </div>
+      <ion-button expand="block" (click)="addGambar()">Tambah Gambar</ion-button>
+    </div>
+
+    <ion-item>
+      <ion-label position="stacked">Isi</ion-label>
+      <ion-textarea formControlName="isi" rows="6" placeholder="Tulis isi berita..."></ion-textarea>
+    </ion-item>
+
+    <ion-button expand="block" type="submit" class="ion-margin-top">Simpan Berita</ion-button>
+  </form>
+</ion-content>
