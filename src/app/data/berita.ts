@@ -237,3 +237,19 @@ export const addBerita = (berita: Berita): void => {
     }
     BERITA.push(berita);
 };
+
+export const updateBeritaArray = (updatedBerita: Berita[]): void => {
+    BERITA.length = 0; 
+    BERITA.push(...updatedBerita); 
+}
+
+export const deleteBerita = (idBerita: number): boolean => {
+    const initialLength = BERITA.length;
+    const index = BERITA.findIndex((b) => b.id === idBerita);
+
+    if (index > -1) {
+        BERITA.splice(index, 1);
+        return true;
+    }
+    return false; 
+};
