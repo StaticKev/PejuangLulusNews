@@ -41,6 +41,21 @@
       </ion-button>
     </ion-item>
 
+    <ion-item class="ion-padding-vertical">
+  <ion-button 
+    color="danger" 
+    expand="block" 
+    (click)="confirmDelete()" 
+    *ngIf="loggedInUser" 
+  >
+    <ion-icon slot="start" name="trash-outline"></ion-icon>
+    Hapus Berita
+  </ion-button>
+</ion-item>
+
+<ion-item class="rating-container ion-padding-vertical">
+  </ion-item>
+
     <!-- FOTO UTAMA -->
     <ion-img [src]="currentBerita?.foto_utama" class="foto-utama"></ion-img>
 

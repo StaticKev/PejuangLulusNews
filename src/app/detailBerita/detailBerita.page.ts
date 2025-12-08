@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BeritaDetail, getBeritaWithKategori } from '../data/berita';
+import { BeritaDetail, deleteBerita, getBeritaWithKategori } from '../data/berita';
 import { Kategori, getAllKategori } from '../data/kategori';
 import { User, getAllUsers, updateUser } from '../data/user';
 import { Rating, getAllRating, updateRatingArray } from '../data/rating';
+import { AlertController, ToastController } from '@ionic/angular';
 
 
 interface Komentar {
@@ -35,7 +36,10 @@ export class DetailBerita {
   loggedInUser: User | null = null;
   tempKomentar: string = '';
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor(
+    private route: ActivatedRoute, 
+    private router: Router,private alertController: AlertController,
+    private toastController: ToastController) {}
 
   ngOnInit() {
     this.semuaBerita = getBeritaWithKategori().sort(
@@ -63,7 +67,7 @@ export class DetailBerita {
           tempReply: '',
         }));
       }
-
+      
       this.isFavorite = !!(
         this.loggedInUser &&
         this.loggedInUser.favorit.some((f) => f.id === this.currentBerita?.id)
@@ -71,6 +75,50 @@ export class DetailBerita {
 
       this.loadUserRating();
     });
+  }
+  // Delete berita
+  async presentToast(message: string, color: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 3000,
+      position: 'bottom',
+      color: color,
+    });
+    await toast.present();
+  }
+  async confirmDelete() {
+    const alert = await this.alertController.create({
+      header: 'Konfirmasi Hapus',
+      message: `Apakah Anda yakin ingin menghapus berita: <b>${this.currentBerita?.judul}</b>?`,
+      buttons: [
+        {
+          text: 'Batal',
+          role: 'cancel',
+        },
+        {
+          text: 'Hapus',
+          cssClass: 'ion-color-danger',
+          handler: () => {
+            this.handleDelete();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  handleDelete() {
+    if (this.currentBerita) {
+      const isDeleted = deleteBerita(this.currentBerita.id);
+      
+      if (isDeleted) {
+        this.presentToast('Berita berhasil dihapus!', 'success');
+        this.router.navigateByUrl('/home', { replaceUrl: true }); 
+      } else {
+        this.presentToast('Gagal menghapus berita: ID tidak ditemukan.', 'danger');
+      }
+    }
   }
 
   // === Rating ===
