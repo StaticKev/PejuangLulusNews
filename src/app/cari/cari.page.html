@@ -41,11 +41,11 @@
             </ion-thumbnail>
 
             <ion-label>
-            <p class="berita-judul-kompak">{{ berita.judul }}</p>
-            <h6 
-                *ngIf="berita.kalimat != ''"
-                [ngStyle]="{ 'color': '#888', 'font-size': '0.9rem' }"
-            ><br>{{ berita.kalimat }}</h6>
+                <p class="berita-judul-kompak">{{ berita.judul }}</p>
+                <h6 
+                    *ngIf="berita.kalimat != ''"
+                    [ngStyle]="{ 'color': '#888', 'font-size': '0.9rem' }"
+                ><br>{{ berita.kalimat }}</h6>
             </ion-label>
 
             <ion-chip
