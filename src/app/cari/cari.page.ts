@@ -31,6 +31,12 @@ export class CariPage implements OnInit {
     this.semuaKategori = getAllKategori();
   }
 
+  ionViewWillEnter() {
+    this.semuaBerita = getBeritaWithKategori();
+    this.semuaKategori = getAllKategori();
+    this.hasilCari = [];
+  }
+
   onSearchChange(event: any) {
     const value = event.detail.value.toLowerCase();
 

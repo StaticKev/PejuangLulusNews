@@ -229,3 +229,27 @@ export const getBeritaWithKategori = (): BeritaDetail[] => {
 export const getBeritaByKategori = (idKategori: number): Berita[] => {
   return BERITA.filter((berita) => berita.idKategori.includes(idKategori));
 };
+
+export const addBerita = (berita: Berita): void => {
+    const maxId = BERITA.reduce((m, b) => (b.id > m ? b.id : m), 0);
+    if (!berita.id || berita.id <= maxId) {
+        berita.id = maxId + 1;
+    }
+    BERITA.push(berita);
+};
+
+export const updateBeritaArray = (updatedBerita: Berita[]): void => {
+    BERITA.length = 0; 
+    BERITA.push(...updatedBerita); 
+}
+
+export const deleteBerita = (idBerita: number): boolean => {
+    const initialLength = BERITA.length;
+    const index = BERITA.findIndex((b) => b.id === idBerita);
+
+    if (index > -1) {
+        BERITA.splice(index, 1);
+        return true;
+    }
+    return false; 
+};
