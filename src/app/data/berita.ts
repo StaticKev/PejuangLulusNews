@@ -150,7 +150,7 @@ const BERITA: Berita[] = [
         id: 110,
         judul: 'Pemerintah Umumkan Kebijakan Baru Terkait Subsidi',
         foto_utama: 'https://placehold.co/600x400/6c757d/white?text=Politik',
-        idKategori: [4, 3], // BENAR: Politik & Ekonomi
+        idKategori: [4, 3],
         gambar_konten: [
         'https://placehold.co/800x600/6c757d/FFFFFF?text=Konferensi',
         ],

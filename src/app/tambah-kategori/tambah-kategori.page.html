@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Tambah Kategori</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="form" (ngSubmit)="submit()" class="ion-padding">
+    <ion-item>
+      <ion-label position="stacked">Kategori</ion-label>
+      <ion-input formControlName="kategori" placeholder="Masukan kategori"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Icon</ion-label>
+      <ion-input formControlName="gambar" placeholder="https://..."></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" type="submit" class="ion-margin-top">Tambah Kategori</ion-button>
+  </form>
+</ion-content>
