@@ -21,6 +21,22 @@
       <ion-input formControlName="foto_utama" placeholder="https://..."></ion-input>
     </ion-item>
 
+    <ion-item>
+        <ion-label position="stacked">Pilih Kategori</ion-label>
+    </ion-item>      
+
+    <ion-item>
+        <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; margin-bottom: 8px;">
+            <div *ngFor="let k of listKategori" style="display: flex; align-items: center;">
+              <ion-checkbox
+                [value]="k.nama"
+                (ionChange)="toggleKategori(k.id, $event.detail.checked)">
+              </ion-checkbox>
+              <ion-label class="ion-margin-start">{{ k.nama }}</ion-label>
+            </div>
+          </div>
+    </ion-item>
+
     <div class="gambar-list">
       <label class="ion-padding-start">Gambar Konten (bisa banyak)</label>
       <div *ngFor="let ctrl of gambarKontenControls; let i = index" class="ion-padding">

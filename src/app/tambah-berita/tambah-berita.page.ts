@@ -4,6 +4,7 @@ import { IonicModule, ToastController } from '@ionic/angular';
 import { FormBuilder, FormArray, FormGroup, FormControl, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Berita, addBerita, getAllBerita } from '../data/berita';
 import { Router } from '@angular/router';
+import { getAllKategori, Kategori } from '../data/kategori';
 
 @Component({
   selector: 'app-tambah-berita',
@@ -15,11 +16,15 @@ import { Router } from '@angular/router';
 export class TambahBeritaPage implements OnInit {
   form!: FormGroup;
 
+  listKategori: Kategori[]
+
   constructor(
     private fb: FormBuilder,
     private toastCtrl: ToastController,
     private router: Router
-  ) {}
+  ) {
+    this.listKategori = getAllKategori();
+  }
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -28,6 +33,7 @@ export class TambahBeritaPage implements OnInit {
       foto_utama: ['', Validators.required],
       gambar_konten: this.fb.array([this.fb.control('')]),
       isi: ['', Validators.required],
+      idKategori: this.fb.array([])
     });
   }
 
@@ -37,6 +43,10 @@ export class TambahBeritaPage implements OnInit {
 
   get gambarKontenControls(): FormControl[] {
     return this.gambarKonten.controls as FormControl[];
+  }
+
+  get idKategori(): FormArray {
+    return this.form.get('idKategori') as FormArray;
   }
 
   addGambar() {
@@ -110,7 +120,6 @@ export class TambahBeritaPage implements OnInit {
         if (ampmRaw === 'AM' && hh === 12) hh = 0;
       }
 
-
       return new Date(parseInt(yearStr, 10), month, parseInt(dayStr, 10), hh, mm, ss);
     } catch (e) {
       return new Date(str);
@@ -135,7 +144,7 @@ export class TambahBeritaPage implements OnInit {
       id,
       judul: this.form.value.judul,
       foto_utama: this.form.value.foto_utama,
-      idKategori: [],
+      idKategori: this.idKategori.value,
       gambar_konten: this.gambarKonten.controls.map((c) => c.value).filter((v: string) => v && v.trim() !== ''),
       timestamp,
       isi: this.form.value.isi,
@@ -149,4 +158,15 @@ export class TambahBeritaPage implements OnInit {
     await toast.present();
     this.router.navigateByUrl('/home');
   }
+
+    toggleKategori(id: number, checked: boolean) {
+        if (checked) {
+            this.idKategori.push(new FormControl(id));
+          } else {
+            const index = this.idKategori.controls.findIndex(c => c.value === id);
+            if (index !== -1) {
+                this.idKategori.removeAt(index);
+            }
+        }
+    }
 }

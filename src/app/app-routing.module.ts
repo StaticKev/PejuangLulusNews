@@ -54,7 +54,14 @@ const routes: Routes = [
         (m) => m.TambahBeritaModule
       ),
     canActivate: [AuthGuard],
+  },  {
+    path: 'tambah-kategori',
+    loadChildren: () => import('./tambah-kategori/tambah-kategori.module').then( m => m.TambahKategoriPageModule)
   },
+
+
+
+
 ];
 
 @NgModule({
