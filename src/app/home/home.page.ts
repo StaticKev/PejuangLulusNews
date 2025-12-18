@@ -8,7 +8,7 @@ import { Kategori, getAllKategori } from '../data/kategori';
 import { AuthService } from '../data/auth';
 import { RouterModule } from '@angular/router';
 import { getAllRating } from '../data/rating';
-
+import { Beritaservice } from '../beritaservice';
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
@@ -28,7 +28,8 @@ export class HomePage implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private authService: AuthService
+    private authService: AuthService,
+    private beritaService : Beritaservice
   ) {}
 
   ionViewWillEnter() {
