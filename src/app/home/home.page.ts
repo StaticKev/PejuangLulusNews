@@ -8,7 +8,7 @@ import { Kategori, getAllKategori } from '../data/kategori';
 import { AuthService } from '../data/auth';
 import { RouterModule } from '@angular/router';
 import { getAllRating } from '../data/rating';
-import { Beritaservice } from '../beritaservice';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
@@ -28,13 +28,11 @@ export class HomePage implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private authService: AuthService,
-    private beritaService : Beritaservice
+    private authService: AuthService
   ) {}
 
   ionViewWillEnter() {
     this.loadUserName();
-    this.refreshBerita();
   }
 
   ngOnInit() {
@@ -62,21 +60,6 @@ export class HomePage implements OnInit {
         this.applyFilter(null);
       }
     });
-  }
-
-  private refreshBerita() {
-    // reload latest berita from data source
-    this.semuaKategori = getAllKategori();
-    this.semuaBerita = getBeritaWithKategori().sort(
-      (a, b) => b.timestamp.getTime() - a.timestamp.getTime()
-    );
-
-    // Reapply current filter if any
-    if (this.kategoriAktif) {
-      this.applyFilter(this.kategoriAktif);
-    } else {
-      this.processBeritaWithRating(this.semuaBerita);
-    }
   }
 
   private processBeritaWithRating(beritaArray: BeritaDetail[]) {
