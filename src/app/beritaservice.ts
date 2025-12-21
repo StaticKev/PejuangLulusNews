@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 //semua yang ada di sini masih menunggu php dan database 
 export class NewsService {
 
-  private baseUrl = 'https://ubaya.cloud/hybrid/160423098/news/'; // ini nanti sesuain lagi ama databasenya
+  private baseUrl = 'https://ubaya.cloud/hybrid/160423020/uas';
 
   constructor(private http: HttpClient) {}
 
