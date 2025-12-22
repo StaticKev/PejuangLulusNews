@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-
+import { NavController } from '@ionic/angular';
 // ===== DUMMY (sementara dikomen) =====
 // import { BeritaDetail, getBeritaWithKategori } from '../data/berita';
 // import { Kategori, getAllKategori } from '../data/kategori';
@@ -36,6 +36,7 @@ export class HomePage implements OnInit {
   public namaUser: string = '';
 
   constructor(
+    private navCtrl: NavController,
     private router: Router,
     private route: ActivatedRoute,
     private authService: AuthService,
@@ -57,12 +58,12 @@ export class HomePage implements OnInit {
     this.processBeritaWithRating(this.semuaBerita);
     */
 
-    // ===== API =====
+    // ===== API VERSION =====
     this.loadKategori();
-    this.loadSemuaBerita();
 
     this.route.queryParams.subscribe(params => {
       const kategori = params['kategori'];
+
       if (kategori) {
         this.kategoriAktif = kategori;
         this.loadBeritaByKategori(kategori);
@@ -78,7 +79,7 @@ export class HomePage implements OnInit {
      ===================== */
 
   loadSemuaBerita() {
-    this.beritaService.getAllBerita().subscribe(res => {
+    this.beritaService.getAllBerita().subscribe((res: any) => {
       this.beritaTerbaru = res.result === 'success' ? res.data : [];
     });
   }
@@ -89,10 +90,9 @@ export class HomePage implements OnInit {
     });
   }
 
-
   loadKategori() {
-    this.beritaService.getKategori().subscribe(res => {
-      this.semuaKategori = res.data;
+    this.beritaService.getKategori().subscribe((res: any) => {
+      this.semuaKategori = res.data || [];
     });
   }
 
@@ -137,7 +137,15 @@ export class HomePage implements OnInit {
   */
 
   // ===== API VERSION =====
-  lihatKategori(namaKategori: string) {
+  lihatKategori(namaKategori: string | null) {
+
+    // klik "Semua"
+    if (namaKategori === null) {
+      this.router.navigate(['/home']);
+      return;
+    }
+
+    // klik kategori yang sama → reset
     if (this.kategoriAktif === namaKategori) {
       this.router.navigate(['/home']);
     } else {
@@ -147,6 +155,9 @@ export class HomePage implements OnInit {
     }
   }
 
+  keKategori() {
+    this.navCtrl.navigateRoot('/kategori');
+  }
   getNamaKategori(berita: any): string {
     return berita.kategori?.[0]?.nama || '';
   }
@@ -174,6 +185,7 @@ export class HomePage implements OnInit {
         handler: () => this.authService.logout(),
       },
     ];
+
     document.body.appendChild(alert);
     await alert.present();
   }

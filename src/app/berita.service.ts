@@ -25,7 +25,7 @@ export class BeritaService {
      ========================= */
 
   getKategori(): Observable<any> {
-    return this.http.get(this.baseUrl + 'kategori.php');
+    return this.http.get(this.baseUrl + 'get_kategori.php');
   }
 
   /* =========================
@@ -126,5 +126,19 @@ export class BeritaService {
       { headers: this.headers }
     );
   }
+
+  //tambah kategori
+  addKategori(nama: string, icon: string) {
+    const body = new FormData();
+    body.append('nama', nama);
+    body.append('icon', icon);
+
+    return this.http.post<any>(
+      this.baseUrl + 'add_kategori.php',
+      body
+    );
+  }
+
+
 
 }
