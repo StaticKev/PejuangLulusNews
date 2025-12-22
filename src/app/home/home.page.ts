@@ -2,12 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
-import { BeritaDetail, getBeritaWithKategori } from '../data/berita';
-import { getAllUsers, User } from '../data/user';
-import { Kategori, getAllKategori } from '../data/kategori';
-import { AuthService } from '../data/auth';
 import { RouterModule } from '@angular/router';
-import { getAllRating } from '../data/rating';
+import { NavController } from '@ionic/angular';
+// ===== DUMMY (sementara dikomen) =====
+// import { BeritaDetail, getBeritaWithKategori } from '../data/berita';
+// import { Kategori, getAllKategori } from '../data/kategori';
+// import { getAllRating } from '../data/rating';
+
+import { AuthService } from '../data/auth';
+import { BeritaService } from '../berita.service';
 
 @Component({
   selector: 'app-home',
@@ -17,115 +20,155 @@ import { getAllRating } from '../data/rating';
   imports: [IonicModule, CommonModule, RouterModule],
 })
 export class HomePage implements OnInit {
-  public semuaBerita: BeritaDetail[] = [];
-  public beritaTerbaru: BeritaDetail[] = [];
-  public beritaTerbaruDenganRating: (BeritaDetail & { avgRating: number })[] =
-    [];
-  public semuaKategori: Kategori[] = [];
-  public kategoriAktif: number | null = null;
+
+  // ===== DUMMY (dikomen) =====
+  // public semuaBerita: BeritaDetail[] = [];
+  // public beritaTerbaruDenganRating: (BeritaDetail & { avgRating: number })[] = [];
+  // public semuaKategori: Kategori[] = [];
+  // public kategoriAktif: number | null = null;
+
+  // ===== API VERSION =====
+  semuaBerita: any[] = [];
+  beritaTerbaru: any[] = [];
+  semuaKategori: any[] = [];
+  kategoriAktif: string | null = null;
+
   public namaUser: string = '';
 
   constructor(
+    private navCtrl: NavController,
     private router: Router,
     private route: ActivatedRoute,
-    private authService: AuthService
-  ) {}
+    private authService: AuthService,
+    private beritaService: BeritaService
+  ) { }
 
   ionViewWillEnter() {
     this.loadUserName();
   }
 
   ngOnInit() {
+
+    // ===== DUMMY (dikomen) =====
+    /*
     this.semuaKategori = getAllKategori();
     this.semuaBerita = getBeritaWithKategori().sort(
       (a, b) => b.timestamp.getTime() - a.timestamp.getTime()
     );
-
     this.processBeritaWithRating(this.semuaBerita);
+    */
 
-    this.route.queryParams.subscribe((params) => {
-      const namaKategoriDariUrl = params['kategori'];
+    // ===== API VERSION =====
+    this.loadKategori();
 
-      if (namaKategoriDariUrl) {
-        const kategoriDitemukan = this.semuaKategori.find(
-          (k) => k.nama.toLowerCase() === namaKategoriDariUrl.toLowerCase()
-        );
+    this.route.queryParams.subscribe(params => {
+      const kategori = params['kategori'];
 
-        if (kategoriDitemukan) {
-          this.applyFilter(kategoriDitemukan.id);
-        } else {
-          this.applyFilter(null);
-        }
+      if (kategori) {
+        this.kategoriAktif = kategori;
+        this.loadBeritaByKategori(kategori);
       } else {
-        this.applyFilter(null);
+        this.kategoriAktif = null;
+        this.loadSemuaBerita();
       }
     });
   }
 
+  /* =====================
+     API FUNCTIONS
+     ===================== */
+
+  loadSemuaBerita() {
+    this.beritaService.getAllBerita().subscribe((res: any) => {
+      this.beritaTerbaru = res.result === 'success' ? res.data : [];
+    });
+  }
+
+  loadBeritaByKategori(namaKategori: string) {
+    this.beritaService.getBeritaByKategori(namaKategori).subscribe((res: any) => {
+      this.beritaTerbaru = res.result === 'success' ? res.data : [];
+    });
+  }
+
+  loadKategori() {
+    this.beritaService.getKategori().subscribe((res: any) => {
+      this.semuaKategori = res.data || [];
+    });
+  }
+
+  /* =====================
+     DUMMY FUNCTIONS (dikomen)
+     ===================== */
+
+  /*
   private processBeritaWithRating(beritaArray: BeritaDetail[]) {
     this.beritaTerbaruDenganRating = beritaArray.map((berita) => {
       const avgRating = this.getAverageRating(berita.id);
-
-      return {
-        ...berita,
-        avgRating: avgRating,
-      } as BeritaDetail & { avgRating: number };
+      return { ...berita, avgRating };
     });
   }
 
   getAverageRating(beritaId: number): number {
     const ratings = getAllRating().filter((r) => r.berita.id === beritaId);
-
-    if (ratings.length === 0) {
-      return 0;
-    }
-
-    const totalNilai = ratings.reduce((sum, r) => sum + r.nilai, 0);
-    return parseFloat((totalNilai / ratings.length).toFixed(1));
+    if (ratings.length === 0) return 0;
+    const total = ratings.reduce((sum, r) => sum + r.nilai, 0);
+    return parseFloat((total / ratings.length).toFixed(1));
   }
+  */
 
+  /* =====================
+     UI ACTION
+     ===================== */
+
+  // ===== DUMMY (dikomen) =====
+  /*
   lihatKategori(idKategori: number) {
     if (this.kategoriAktif === idKategori) {
       this.router.navigate(['/home']);
     } else {
-      const kategori = this.semuaKategori.find((k) => k.id === idKategori);
+      const kategori = this.semuaKategori.find(k => k.id === idKategori);
       if (kategori) {
         this.router.navigate(['/home'], {
-          queryParams: { kategori: kategori.nama.toLowerCase() },
+          queryParams: { kategori: kategori.nama.toLowerCase() }
         });
       }
     }
   }
+  */
 
-  private applyFilter(idKategori: number | null) {
-    this.kategoriAktif = idKategori;
-    let filteredBerita: BeritaDetail[];
+  // ===== API VERSION =====
+  lihatKategori(namaKategori: string | null) {
 
-    if (idKategori === null) {
-      filteredBerita = [...this.semuaBerita];
-    } else {
-      filteredBerita = this.semuaBerita.filter((berita) =>
-        berita.idKategori.includes(idKategori)
-      );
+    // klik "Semua"
+    if (namaKategori === null) {
+      this.router.navigate(['/home']);
+      return;
     }
 
-    this.processBeritaWithRating(filteredBerita);
+    // klik kategori yang sama → reset
+    if (this.kategoriAktif === namaKategori) {
+      this.router.navigate(['/home']);
+    } else {
+      this.router.navigate(['/home'], {
+        queryParams: { kategori: namaKategori }
+      });
+    }
   }
 
-  getNamaKategori(berita: BeritaDetail): string {
-    if (this.kategoriAktif) {
-      const idx = berita.idKategori.indexOf(this.kategoriAktif);
-      if (idx !== -1) {
-        return berita.namaKategori[idx];
-      }
-    }
-    return berita.namaKategori[0];
+  keKategori() {
+    this.navCtrl.navigateRoot('/kategori');
+  }
+  getNamaKategori(berita: any): string {
+    return berita.kategori?.[0]?.nama || '';
+  }
+
+  getRating(berita: any): number {
+    return berita.rating ? parseFloat(berita.rating) : 0;
   }
 
   loadUserName() {
     const username = localStorage.getItem('loggedInUsername');
     if (username) {
-      const user = getAllUsers().find((u) => u.username === username);
       this.namaUser = username;
     }
   }
@@ -135,16 +178,11 @@ export class HomePage implements OnInit {
     alert.header = 'Konfirmasi';
     alert.message = 'Apakah Anda yakin ingin keluar?';
     alert.buttons = [
-      {
-        text: 'Batal',
-        role: 'cancel',
-      },
+      { text: 'Batal', role: 'cancel' },
       {
         text: 'Ya, Keluar',
         role: 'confirm',
-        handler: () => {
-          this.authService.logout();
-        },
+        handler: () => this.authService.logout(),
       },
     ];
 
