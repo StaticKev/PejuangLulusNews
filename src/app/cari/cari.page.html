@@ -59,7 +59,7 @@
             <ion-chip color="warning" class="rating-chip-kecil">
                 <ion-icon name="star" style="font-size: 14px"></ion-icon>
                 <ion-label style="font-size: 0.75rem">
-                    {{ getAverageRating(berita.id) | number:'1.1-1' }}
+                    {{ berita.rating ? (berita.rating | number:'1.1-1') : '0.0' }}
                 </ion-label>
             </ion-chip>
 

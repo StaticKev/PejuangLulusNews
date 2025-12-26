@@ -49,15 +49,6 @@ export class HomePage implements OnInit {
 
   ngOnInit() {
 
-    // ===== DUMMY (dikomen) =====
-    /*
-    this.semuaKategori = getAllKategori();
-    this.semuaBerita = getBeritaWithKategori().sort(
-      (a, b) => b.timestamp.getTime() - a.timestamp.getTime()
-    );
-    this.processBeritaWithRating(this.semuaBerita);
-    */
-
     // ===== API VERSION =====
     this.loadKategori();
 

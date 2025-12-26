@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../data/auth';
-import { Router } from '@angular/router';
-import { BeritaDetail, getBeritaWithKategori } from '../data/berita';
-import { Kategori, getAllKategori } from '../data/kategori';
-import { Rating, getAllRating } from '../data/rating';
+import { BeritaDetail } from '../data/berita';
+import { BeritaService } from '../berita.service';
 
 @Component({
   selector: 'app-cari',
@@ -12,60 +10,57 @@ import { Rating, getAllRating } from '../data/rating';
   standalone: false,
 })
 export class CariPage implements OnInit {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService
+    , private beritaService: BeritaService
+  ) {}
 
   doLogout() {
     this.authService.logout();
   }
 
-  semuaBerita: BeritaDetail[] = [];
   hasilCari: BeritaDetail[] = [];
-
-  semuaKategori: Kategori[] = [];
   kategoriAktif: number | null = null;
 
   private timeout: any;
 
   ngOnInit() {
-    this.semuaBerita = getBeritaWithKategori();
-    this.semuaKategori = getAllKategori();
   }
 
   ionViewWillEnter() {
-    this.semuaBerita = getBeritaWithKategori();
-    this.semuaKategori = getAllKategori();
     this.hasilCari = [];
   }
 
   onSearchChange(event: any) {
-    const value = event.detail.value.toLowerCase();
+  const keyword = event.detail.value;
+  console.log('keyword:', keyword);
 
-    this.hasilCari.forEach(berita => {
-        berita.kalimat = ""
-    });
 
-    clearTimeout(this.timeout);
+  clearTimeout(this.timeout);
 
-    this.timeout = setTimeout(() => {
+  if (!keyword || keyword.trim() === '') {
+    this.hasilCari = [];
+    return;
+  }
+
+  this.timeout = setTimeout(() => {
+    this.beritaService.getBeritaByKeyword(keyword).subscribe(res => {
+      if (res.result === 'success') {
+        this.hasilCari = res.data.map((b: any) => ({
+          id: b.id,
+          judul: b.judul,
+          foto_utama: b.foto_utama,
+          isi: b.isi,
+          rating: b.rating,
+          namaKategori: b.kategori.map((k: any) => k.nama),
+          kalimat: ''  
+        }));
+      } else {
         this.hasilCari = [];
+      }
+    });
+  }, 500);
+}
 
-        const regex = new RegExp(`\\b${value}\\b`, "i");
-
-        this.semuaBerita.forEach(berita => {
-            if (berita.judul.toLowerCase().includes(value)) {
-                this.hasilCari.push(berita)
-            } else if (regex.test(berita.isi.toLowerCase())) {
-                const kalimat: string[] = berita.isi.split('.')
-                kalimat.forEach(k => {
-                    if (regex.test(k)) {
-                        berita.kalimat = k
-                    }
-                });
-                this.hasilCari.push(berita)
-            }
-        });
-        }, 500);
-    }
 
   getNamaKategori(berita: BeritaDetail): string {
     if (berita.namaKategori && berita.namaKategori.length > 0) {
@@ -74,14 +69,5 @@ export class CariPage implements OnInit {
     return 'Umum';
   }
 
-  getAverageRating(beritaId: number): number {
-    const ratings = getAllRating().filter((r) => r.berita.id === beritaId);
-
-    if (ratings.length === 0) {
-      return 0;
-    }
-
-    const totalNilai = ratings.reduce((sum, r) => sum + r.nilai, 0);
-    return parseFloat((totalNilai / ratings.length).toFixed(1));
-  }
+ 
 }

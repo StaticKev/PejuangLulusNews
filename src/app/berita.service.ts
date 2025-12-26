@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -15,27 +15,15 @@ export class BeritaService {
     'Content-Type': 'application/x-www-form-urlencoded'
   });
 
-  // helper untuk encode POST body
   private encode(body: URLSearchParams): string {
     return body.toString();
   }
-
-  /* =========================
-     KATEGORI
-     ========================= */
 
   getKategori(): Observable<any> {
     return this.http.get(this.baseUrl + 'get_kategori.php');
   }
 
-  /* =========================
-     BERITA
-     ========================= */
-
-  // 🔹 SESUAI PHP get_berita_by_kategori.php
-  // PHP membaca: $_POST['kategori']
-  // isi: NAMA kategori
-
+ 
 
   getBeritaByKategori(namaKategori: string): Observable<any> {
     const body = new URLSearchParams();
@@ -48,7 +36,19 @@ export class BeritaService {
     );
   }
 
-  // ambil semua berita (kategori kosong)
+
+  deleteBerita(beritaId: number): Observable<any> {
+    const body = new URLSearchParams();
+    body.set('id', beritaId.toString());
+
+    return this.http.post(
+      this.baseUrl + 'del_berita.php',
+      body.toString(),
+      { headers: this.headers }
+    );
+  }
+
+
   getAllBerita(): Observable<any> {
     const body = new URLSearchParams();
     body.set('kategori', '');
@@ -60,44 +60,41 @@ export class BeritaService {
     );
   }
 
-  // detail berita
-  getBeritaDetail(beritaId: number): Observable<any> {
-    return this.http.get(
-      this.baseUrl + 'berita_detail.php?id=' + beritaId
+    getBeritaDetail(bid: number, uid: number) {
+
+    const body = new HttpParams()
+      .set('bid', bid.toString())
+      .set('uid', uid.toString());
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/x-www-form-urlencoded'
+    });
+
+    return this.http.post<any>(
+      this.baseUrl + 'get_detail_berita.php',
+      body.toString(),
+      { headers }
     );
   }
 
-  /* =========================
-     SEARCH / KEYWORD
-     ========================= */
+  addRating(uid: number, bid: number, rating: number) {
+  const body = new HttpParams()
+    .set('uid', uid.toString())
+    .set('bid', bid.toString())
+    .set('rating', rating.toString());
 
-  // asumsi PHP: extract($_POST) dan param = keyword
-  getBeritaByKeyword(keyword: string): Observable<any> {
-    const body = new URLSearchParams();
-    body.set('keyword', keyword);
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/x-www-form-urlencoded'
+  });
 
-    return this.http.post(
-      this.baseUrl + 'get_berita_by_keyword.php',
-      this.encode(body),
-      { headers: this.headers }
-    );
-  }
+  return this.http.post<any>(
+    this.baseUrl + 'add_rating.php',
+    body.toString(),
+    { headers }
+  );
+}
 
-  /* =========================
-     RATING
-     ========================= */
 
-  addRating(beritaId: number, rating: number): Observable<any> {
-    const body = new URLSearchParams();
-    body.set('berita_id', beritaId.toString());
-    body.set('rating', rating.toString());
-
-    return this.http.post(
-      this.baseUrl + 'add_rating.php',
-      this.encode(body),
-      { headers: this.headers }
-    );
-  }
 
   getAverageRating(beritaId: number): Observable<any> {
     return this.http.get(
@@ -105,29 +102,21 @@ export class BeritaService {
     );
   }
 
-  /* =========================
-     KOMENTAR
-     ========================= */
-
   getKomentar(beritaId: number): Observable<any> {
     return this.http.get(
       this.baseUrl + 'komentar.php?berita_id=' + beritaId
     );
   }
 
-  addKomentar(beritaId: number, komentar: string): Observable<any> {
-    const body = new URLSearchParams();
-    body.set('berita_id', beritaId.toString());
-    body.set('komentar', komentar);
+   addKomentar(uid: number, bid: number, komentar: string): Observable<any> {
+    const body = new FormData();
+    body.append('uid', uid.toString());
+    body.append('bid', bid.toString());
+    body.append('komentar', komentar);
 
-    return this.http.post(
-      this.baseUrl + 'add_komentar.php',
-      this.encode(body),
-      { headers: this.headers }
-    );
+    return this.http.post(this.baseUrl + 'add_komentar.php', body);
   }
 
-  //tambah kategori
   addKategori(nama: string, icon: string) {
     const body = new FormData();
     body.append('nama', nama);
@@ -139,6 +128,41 @@ export class BeritaService {
     );
   }
 
+  changeFavorite(uid: number, bid: number, isFavorite: boolean) {
 
+  const body = new HttpParams()
+    .set('uid', uid.toString())
+    .set('bid', bid.toString());
 
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/x-www-form-urlencoded'
+  });
+
+  // jika sudah favorit → DELETE
+  const url = isFavorite
+    ? this.baseUrl + 'del_favorit.php'
+    : this.baseUrl + 'add_favorit.php';
+
+  return this.http.post<any>(
+    url,
+    body.toString(),
+    { headers }
+  );
+}
+
+getBeritaByKeyword(keyword: string) {
+
+    const body = new HttpParams()
+      .set('keyword', keyword);
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/x-www-form-urlencoded'
+    });
+
+    return this.http.post<any>(
+      this.baseUrl + 'get_berita_by_keyword.php',
+      body.toString(),
+      { headers }
+    );
+  }
 }
