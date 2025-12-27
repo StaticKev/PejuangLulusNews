@@ -44,7 +44,8 @@ export class DetailBerita {
     private router: Router,
     private alertController: AlertController,
     private toastController: ToastController,
-    private beritaService: BeritaService) {}
+    private beritaService: BeritaService
+  ) {}
 
 
 

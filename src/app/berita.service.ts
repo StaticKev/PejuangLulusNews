@@ -165,4 +165,21 @@ getBeritaByKeyword(keyword: string) {
       { headers }
     );
   }
+
+  getFavoritByUser(uid: number) {
+    const body = new HttpParams()
+      .set('uid', uid.toString());
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/x-www-form-urlencoded'
+    });
+
+    return this.http.post<any>(
+      this.baseUrl + 'get_favorit.php',
+      body.toString(),
+      { headers }
+    );
+  }
 }
+
+

@@ -1,9 +1,10 @@
-import { AuthService } from '../data/auth';
-import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { BeritaDetail, getBeritaWithKategori } from '../data/berita';
+import { Router } from '@angular/router';
+import { BeritaDetail } from '../data/berita';
 import { Kategori, getAllKategori } from '../data/kategori';
-import { User, getAllUsers } from '../data/user';
+import { BeritaService } from '../berita.service';
+import { AuthService } from '../auth.service';
+import { getAllUsers, User } from '../data/user';
 
 @Component({
   selector: 'app-favoritku',
@@ -12,16 +13,21 @@ import { User, getAllUsers } from '../data/user';
   standalone: false,
 })
 export class FavoritkuPage implements OnInit {
-  public beritaFavorit: BeritaDetail[] = [];
-  public semuaKategori: Kategori[] = [];
-  public kategoriAktif: number | null = null;
-  public loggedInUser: User | null = null;
 
-  constructor(private router: Router, private authService: AuthService) {}
+  beritaFavorit: BeritaDetail[] = [];
+  semuaKategori: Kategori[] = [];
+  loggedInUserId: number | null = null;
+  loggedInUser: User | null = null;
+  
+
+  constructor(
+    private router: Router,
+    private beritaService: BeritaService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
     this.semuaKategori = getAllKategori();
-    this.loadFavorit();
   }
 
   ionViewWillEnter() {
@@ -30,30 +36,28 @@ export class FavoritkuPage implements OnInit {
 
   loadFavorit() {
     this.beritaFavorit = [];
-    this.loggedInUser = null;
 
-    const loggedInUsername = localStorage.getItem('loggedInUsername');
+    const username = localStorage.getItem('loggedInUsername');
+    this.loggedInUser = getAllUsers().find(u => u.username === username) || null;
+    
+    const uid = this.loggedInUser ? this.loggedInUser.id : 0;
+    if (!uid) return;
 
-    for (const u of getAllUsers()) {
-      if (u.username === loggedInUsername) {
-        this.loggedInUser = u;
-        break;
-      }
-    }
-
-    if (this.loggedInUser != null) {
-      const allBeritaWithKategori = getBeritaWithKategori();
-      const hasilFavorit: BeritaDetail[] = [];
-
-      for (const favorit of this.loggedInUser.favorit) {
-        const berita = allBeritaWithKategori.find((b) => b.id === favorit.id);
-        if (berita) {
-          hasilFavorit.push(berita);
+    this.loggedInUserId = Number(uid);
+    this.beritaService.getFavoritByUser(this.loggedInUserId)
+      .subscribe(res => {
+        if (res.result === 'success') {
+          this.beritaFavorit = res.data.map((b: any) => ({
+            id: b.id,
+            judul: b.judul,
+            foto_utama: b.foto_utama,
+            rating: b.rating ? parseFloat(b.rating) : null,
+            namaKategori: b.kategori.map((k: any) => k.nama)
+          }));
+        } else {
+          this.beritaFavorit = [];
         }
-      }
-
-      this.beritaFavorit = hasilFavorit;
-    }
+      });
   }
 
   doLogout() {
@@ -61,13 +65,10 @@ export class FavoritkuPage implements OnInit {
   }
 
   getNamaKategori(berita: BeritaDetail): string {
-    if (berita.namaKategori && berita.namaKategori.length > 0) {
-      return berita.namaKategori[0];
-    }
-    return 'Umum';
+    return berita.namaKategori?.[0] ?? 'Umum';
   }
 
-  bacaBerita(idBerita: number) {
-    this.router.navigate(['/baca-berita', idBerita]);
+  bacaBerita(id: number) {
+    this.router.navigate(['/detailBerita', id, 'favoritku']);
   }
 }
