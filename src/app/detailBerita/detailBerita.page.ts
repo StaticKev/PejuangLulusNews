@@ -36,8 +36,9 @@ export class DetailBerita {
   backTo: string = '';
   currentBerita?: BeritaDetail;
 
-  loggedInUser: User | null = null;
   tempKomentar: string = '';
+  username: string | null = null;
+  uid : number = 0;
 
   constructor(
     private route: ActivatedRoute, 
@@ -51,10 +52,9 @@ export class DetailBerita {
 
     
   ngOnInit() {
-    const username = localStorage.getItem('loggedInUsername');
-    this.loggedInUser = getAllUsers().find(u => u.username === username) || null;
+    this.username = localStorage.getItem('loggedInUsername');
+    this.uid = Number(localStorage.getItem('uid') || '0');
 
-    const uid = this.loggedInUser ? this.loggedInUser.id : 0;
 
     this.route.paramMap.subscribe(params => {
       this.idBerita = Number(params.get('id'));
@@ -67,7 +67,7 @@ export class DetailBerita {
 
       // console.log(this.idBerita, uid);
       this.beritaService
-        .getBeritaDetail(this.idBerita, uid)
+        .getBeritaDetail(this.idBerita, this.uid)
         .subscribe((res: any) => {
           
           if (res.result === 'success') {
@@ -174,7 +174,7 @@ export class DetailBerita {
 
   // === Rating ===
   loadUserRating() {
-    if (!this.loggedInUser || !this.currentBerita) {
+    if (!this.username || !this.currentBerita) {
       this.userRating = 0;
       return;
     }
@@ -182,14 +182,14 @@ export class DetailBerita {
     const existingRating = getAllRating().find(
       (r) =>
         r.berita.id === this.currentBerita!.id &&
-        r.user.id === this.loggedInUser!.id
+        r.user.id === this.uid
     );
 
     this.userRating = existingRating ? existingRating.nilai : 0;
   }
 
   rateNews(star: number) {
-  if (!this.loggedInUser) {
+  if (!this.username) {
     alert('Anda harus login untuk memberikan rating!');
     return;
   }
@@ -199,7 +199,7 @@ export class DetailBerita {
     return;
   }
 
-  const uid = this.loggedInUser.id;
+  const uid = this.uid;
   const bid = this.currentBerita.id;
   const rating = star;
 console.log(`Memberikan rating ${rating} untuk berita ID ${bid} oleh user ID ${uid}`);
@@ -220,12 +220,12 @@ console.log(`Memberikan rating ${rating} untuk berita ID ${bid} oleh user ID ${u
 
 
  updateFavorite() {
-  if (!this.loggedInUser || !this.currentBerita) {
+  if (!this.username || !this.currentBerita) {
     alert('Anda harus login untuk mengubah favorit');
     return;
   }
 
-  const uid = this.loggedInUser.id;
+  const uid = this.uid;
   const bid = this.currentBerita.id;
 
   this.beritaService
@@ -249,7 +249,7 @@ console.log(`Memberikan rating ${rating} untuk berita ID ${bid} oleh user ID ${u
   // === Komentar ===
 
   tambahKomentar() {
-  if (!this.loggedInUser) {
+  if (!this.username) {
     alert('Silakan login terlebih dahulu');
     return;
   }
@@ -264,7 +264,7 @@ console.log(`Memberikan rating ${rating} untuk berita ID ${bid} oleh user ID ${u
     return;
   }
 
-  const uid = this.loggedInUser.id;
+  const uid = this.uid;
   const bid = this.currentBerita.id;
   const komentar = this.tempKomentar.trim();
 
@@ -275,9 +275,9 @@ console.log(`Memberikan rating ${rating} untuk berita ID ${bid} oleh user ID ${u
 
           this.currentBerita!.komentar.unshift({
             user: {
-              username: this.loggedInUser!.username,
-              id: this.loggedInUser!.id,
-              nama: this.loggedInUser!.username,
+              username: this.username,
+              id: this.uid,
+              nama: "",
               email: '',
               password: '',
               favorit: []
@@ -308,7 +308,7 @@ console.log(`Memberikan rating ${rating} untuk berita ID ${bid} oleh user ID ${u
   }
 
   tambahBalasan(komentar: Komentar) {
-    if (!this.loggedInUser) {
+    if (!this.username) {
       alert('Anda harus login untuk membalas!');
       return;
     }
@@ -317,7 +317,14 @@ console.log(`Memberikan rating ${rating} untuk berita ID ${bid} oleh user ID ${u
     if (!replyText) return;
 
     const newReply: Komentar = {
-      user: this.loggedInUser,
+      user:{
+              username: this.username,
+              id: this.uid,
+              nama: "",
+              email: '',
+              password: '',
+              favorit: []
+            } as User,
       komentar: replyText,
       timestamp: new Date(),
       replies: [],

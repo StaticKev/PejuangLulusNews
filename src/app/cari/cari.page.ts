@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../data/auth';
+import { AuthService } from '../auth.service';
 import { BeritaDetail } from '../data/berita';
 import { BeritaService } from '../berita.service';
 
@@ -14,8 +14,21 @@ export class CariPage implements OnInit {
     , private beritaService: BeritaService
   ) {}
 
-  doLogout() {
-    this.authService.logout();
+  async doLogout() {
+    const alert = document.createElement('ion-alert');
+    alert.header = 'Konfirmasi';
+    alert.message = 'Apakah Anda yakin ingin keluar?';
+    alert.buttons = [
+      { text: 'Batal', role: 'cancel' },
+      {
+        text: 'Ya, Keluar',
+        role: 'confirm',
+        handler: () => this.authService.logout(),
+      },
+    ];
+
+    document.body.appendChild(alert);
+    await alert.present();
   }
 
   hasilCari: BeritaDetail[] = [];

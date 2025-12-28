@@ -10,22 +10,19 @@ import { tap } from 'rxjs/operators'; // 2. Import operator tap
 export class AuthService {
   private readonly LOGGED_IN_KEY = 'isLoggedIn';
   private readonly USERNAME_KEY = 'loggedInUsername'; // Simpan key biar konsisten
+  private readonly UID = 'uid'; // Simpan user ID
   
-  // URL API Kamu
   private baseUrl = 'https://ubaya.cloud/hybrid/160423020/uas/'; 
 
   constructor(
     private router: Router,
-    private http: HttpClient // Inject HttpClient
+    private http: HttpClient
   ) {}
 
-  // Helper untuk encode form data
   private encode(body: URLSearchParams) {
     return body.toString();
   }
 
-  // --- FUNGSI LOGIN (MIGRASI KE API) ---
-  // Return type berubah dari boolean menjadi Observable
   login(username: string, password: string): Observable<any> {
     const body = new URLSearchParams();
     body.set('username', username);
@@ -48,6 +45,8 @@ export class AuthService {
           // Simpan session seperti kode lama kamu
           localStorage.setItem(this.LOGGED_IN_KEY, 'true');
           localStorage.setItem(this.USERNAME_KEY, response.username); 
+          localStorage.setItem(this.UID, response.uid.toString()); 
+
           
           // Opsional: Simpan email jika perlu
           // localStorage.setItem('email', response.email);
@@ -59,10 +58,7 @@ export class AuthService {
   // --- FUNGSI LOGOUT (Tetap sama, hanya merapikan) ---
   logout() {
     localStorage.clear(); // Hapus semua session
-    console.log('All session data cleared');
-
     this.router.navigate(['/login']).then(() => {
-      // Reload halaman agar state aplikasi benar-benar bersih
       window.location.reload(); 
     });
   }

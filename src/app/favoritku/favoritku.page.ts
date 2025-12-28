@@ -16,8 +16,8 @@ export class FavoritkuPage implements OnInit {
 
   beritaFavorit: BeritaDetail[] = [];
   semuaKategori: Kategori[] = [];
-  loggedInUserId: number | null = null;
-  loggedInUser: User | null = null;
+  username: string | null = null;
+  uid : number = 0;
   
 
   constructor(
@@ -37,14 +37,11 @@ export class FavoritkuPage implements OnInit {
   loadFavorit() {
     this.beritaFavorit = [];
 
-    const username = localStorage.getItem('loggedInUsername');
-    this.loggedInUser = getAllUsers().find(u => u.username === username) || null;
-    
-    const uid = this.loggedInUser ? this.loggedInUser.id : 0;
-    if (!uid) return;
+    this.username = localStorage.getItem('loggedInUsername');
+    this.uid = Number(localStorage.getItem('uid') || '0');
+      if (!this.uid) return;
 
-    this.loggedInUserId = Number(uid);
-    this.beritaService.getFavoritByUser(this.loggedInUserId)
+    this.beritaService.getFavoritByUser(this.uid)
       .subscribe(res => {
         if (res.result === 'success') {
           this.beritaFavorit = res.data.map((b: any) => ({
@@ -60,8 +57,21 @@ export class FavoritkuPage implements OnInit {
       });
   }
 
-  doLogout() {
-    this.authService.logout();
+  async doLogout() {
+    const alert = document.createElement('ion-alert');
+    alert.header = 'Konfirmasi';
+    alert.message = 'Apakah Anda yakin ingin keluar?';
+    alert.buttons = [
+      { text: 'Batal', role: 'cancel' },
+      {
+        text: 'Ya, Keluar',
+        role: 'confirm',
+        handler: () => this.authService.logout(),
+      },
+    ];
+
+    document.body.appendChild(alert);
+    await alert.present();
   }
 
   getNamaKategori(berita: BeritaDetail): string {

@@ -4,12 +4,8 @@ import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NavController } from '@ionic/angular';
-// ===== DUMMY (sementara dikomen) =====
-// import { BeritaDetail, getBeritaWithKategori } from '../data/berita';
-// import { Kategori, getAllKategori } from '../data/kategori';
-// import { getAllRating } from '../data/rating';
 
-import { AuthService } from '../data/auth';
+import { AuthService } from '../auth.service';
 import { BeritaService } from '../berita.service';
 
 @Component({
