@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BeritaDetail} from '../data/berita';
-import {BeritaService} from '../berita.service';
+import { BeritaDetail } from '../data/berita';
+import { BeritaService } from '../berita.service';
 import { Kategori, getAllKategori } from '../data/kategori';
 import { User, getAllUsers, updateUser } from '../data/user';
 import { Rating, getAllRating, updateRatingArray } from '../data/rating';
@@ -38,19 +38,19 @@ export class DetailBerita {
 
   tempKomentar: string = '';
   username: string | null = null;
-  uid : number = 0;
+  uid: number = 0;
 
   constructor(
-    private route: ActivatedRoute, 
+    private route: ActivatedRoute,
     private router: Router,
     private alertController: AlertController,
     private toastController: ToastController,
     private beritaService: BeritaService
-  ) {}
+  ) { }
 
 
 
-    
+
   ngOnInit() {
     this.username = localStorage.getItem('loggedInUsername');
     this.uid = Number(localStorage.getItem('uid') || '0');
@@ -69,36 +69,36 @@ export class DetailBerita {
       this.beritaService
         .getBeritaDetail(this.idBerita, this.uid)
         .subscribe((res: any) => {
-          
+
           if (res.result === 'success') {
             const data = res.data;
 
             this.currentBerita = {
               ...data,
               timestamp: new Date(data.timestamp),
-              fotoUtama: data.foto_utama, 
-              gambar_konten: data.gambar || [], 
+              fotoUtama: data.foto_utama,
+              gambar_konten: data.gambar || [],
 
               komentar: (data.komentar || []).map((k: any) => ({
-                user: { 
-                  username: k.username, 
-                  id: 0, 
-                  nama: k.username, 
+                user: {
+                  username: k.username,
+                  id: 0,
+                  nama: k.username,
                   email: '',
                   password: '',
                   favorit: []
                 } as User,
                 komentar: k.komentar,
                 timestamp: new Date(k.timestamp),
-                replies: [],   
+                replies: [],
                 showReplyBox: false,
                 tempReply: ''
               })),
 
               // Mapping Kategori
               kategori: (data.kategori || []).map((cat: any) => ({
-                 nama: cat.nama,
-                 icon: cat.icon
+                nama: cat.nama,
+                icon: cat.icon
               }))
             };
             console.log(this.currentBerita);
@@ -122,7 +122,7 @@ export class DetailBerita {
 
 
 
-  
+
   // Delete berita
   async presentToast(message: string, color: string) {
     const toast = await this.toastController.create({
@@ -189,116 +189,140 @@ export class DetailBerita {
   }
 
   rateNews(star: number) {
-  if (!this.username) {
-    alert('Anda harus login untuk memberikan rating!');
-    return;
-  }
+    if (!this.username) {
+      alert('Anda harus login untuk memberikan rating!');
+      return;
+    }
 
-  if (!this.currentBerita) {
-    alert('Berita tidak ditemukan');
-    return;
-  }
+    if (!this.currentBerita) {
+      alert('Berita tidak ditemukan');
+      return;
+    }
 
-  const uid = this.uid;
-  const bid = this.currentBerita.id;
-  const rating = star;
-console.log(`Memberikan rating ${rating} untuk berita ID ${bid} oleh user ID ${uid}`);
-  this.beritaService.addRating(uid, bid, rating)
-    .subscribe({
-      next: (res: any) => {
-        if (res.result === 'success') {
-          window.location.reload();
-        } else {
-          alert(res.message);
-        }
+    const uid = this.uid;
+    const bid = this.currentBerita.id;
+    const rating = star;
+
+    // Update UI langsung
+    this.userRating = rating;
+
+    // Hapus rating lama dulu
+    this.beritaService.deleteRating(uid, bid).subscribe({
+      next: () => {
+        // Tambahkan rating baru
+        this.beritaService.addRating(uid, bid, rating).subscribe({
+          next: (res: any) => {
+            if (res.result !== 'success') {
+              this.presentToast(res.message, 'danger');
+            } else {
+              this.presentToast('Rating berhasil diperbarui!', 'success');
+            }
+          },
+          error: () => {
+            this.presentToast('Gagal menambahkan rating', 'danger');
+          }
+        });
       },
       error: () => {
-        alert('Gagal mengirim rating');
+        // Jika rating lama tidak ada, tetap bisa menambah rating baru
+        this.beritaService.addRating(uid, bid, rating).subscribe({
+          next: (res: any) => {
+            if (res.result !== 'success') {
+              this.presentToast(res.message, 'danger');
+            } else {
+              this.presentToast('Rating berhasil ditambahkan!', 'success');
+            }
+          },
+          error: () => {
+            this.presentToast('Gagal menambahkan rating', 'danger');
+          }
+        });
       }
     });
-}
-
-
- updateFavorite() {
-  if (!this.username || !this.currentBerita) {
-    alert('Anda harus login untuk mengubah favorit');
-    return;
   }
 
-  const uid = this.uid;
-  const bid = this.currentBerita.id;
 
-  this.beritaService
-    .changeFavorite(uid, bid, this.isFavorite)
-    .subscribe({
-      next: (res: any) => {
-        if (res.result === 'success') {
-          // toggle UI
-          this.isFavorite = !this.isFavorite;
-        } else {
-          alert(res.message);
+
+  updateFavorite() {
+    if (!this.username || !this.currentBerita) {
+      alert('Anda harus login untuk mengubah favorit');
+      return;
+    }
+
+    const uid = this.uid;
+    const bid = this.currentBerita.id;
+
+    this.beritaService
+      .changeFavorite(uid, bid, this.isFavorite)
+      .subscribe({
+        next: (res: any) => {
+          if (res.result === 'success') {
+            // toggle UI
+            this.isFavorite = !this.isFavorite;
+          } else {
+            alert(res.message);
+          }
+        },
+        error: () => {
+          alert('Gagal mengubah favorit');
         }
-      },
-      error: () => {
-        alert('Gagal mengubah favorit');
-      }
-    });
-}
+      });
+  }
 
 
   // === Komentar ===
 
   tambahKomentar() {
-  if (!this.username) {
-    alert('Silakan login terlebih dahulu');
-    return;
-  }
+    if (!this.username) {
+      alert('Silakan login terlebih dahulu');
+      return;
+    }
 
-  if (!this.tempKomentar || this.tempKomentar.trim() === '') {
-    alert('Komentar tidak boleh kosong');
-    return;
-  }
+    if (!this.tempKomentar || this.tempKomentar.trim() === '') {
+      alert('Komentar tidak boleh kosong');
+      return;
+    }
 
-  if (!this.currentBerita) {
-    alert('Berita tidak ditemukan');
-    return;
-  }
+    if (!this.currentBerita) {
+      alert('Berita tidak ditemukan');
+      return;
+    }
 
-  const uid = this.uid;
-  const bid = this.currentBerita.id;
-  const komentar = this.tempKomentar.trim();
+    const uid = this.uid;
+    const bid = this.currentBerita.id;
+    const komentar = this.tempKomentar.trim();
 
-  this.beritaService.addKomentar(uid, bid, komentar)
-    .subscribe({
-      next: (res) => {
-        if (res.result === 'success') {
+    this.beritaService.addKomentar(uid, bid, komentar)
+      .subscribe({
+        next: (res) => {
+          if (res.result === 'success') {
 
-          this.currentBerita!.komentar.unshift({
-            user: {
-              username: this.username,
-              id: this.uid,
-              nama: "",
-              email: '',
-              password: '',
-              favorit: []
-            } as User,
-            komentar: komentar,
-            timestamp: new Date(),
-            replies: [],
-            showReplyBox: false,
-            tempReply: ''
-          });
+            this.currentBerita!.komentar.unshift({
+              user: {
+                username: this.username,
+                id: this.uid,
+                nama: "",
+                email: '',
+                password: '',
+                favorit: []
+              } as User,
+              komentar: komentar,
+              timestamp: new Date(),
+              replies: [],
+              showReplyBox: false,
+              tempReply: ''
+            });
 
-          this.tempKomentar = '';
-        } else {
-          alert(res.message);
+            this.tempKomentar = '';
+          } else {
+            alert(res.message);
+          }
+        },
+        error: () => {
+          alert('Terjadi kesalahan saat mengirim komentar');
         }
-      },
-      error: () => {
-        alert('Terjadi kesalahan saat mengirim komentar');
-      }
-    });
-}
+      });
+  }
 
 
 
@@ -317,26 +341,27 @@ console.log(`Memberikan rating ${rating} untuk berita ID ${bid} oleh user ID ${u
     if (!replyText) return;
 
     const newReply: Komentar = {
-      user:{
-              username: this.username,
-              id: this.uid,
-              nama: "",
-              email: '',
-              password: '',
-              favorit: []
-            } as User,
+      user: {
+        username: this.username,
+        id: this.uid,
+        nama: "",
+        email: '',
+        password: '',
+        favorit: []
+      } as User,
       komentar: replyText,
       timestamp: new Date(),
       replies: [],
     };
 
     if (!komentar.replies) {
-    komentar.replies = [];
-  }
+      komentar.replies = [];
+    }
 
     komentar.replies.push(newReply);
 
     komentar.tempReply = '';
     komentar.showReplyBox = false;
   }
+
 }
