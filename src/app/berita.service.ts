@@ -23,7 +23,7 @@ export class BeritaService {
     return this.http.get(this.baseUrl + 'get_kategori.php');
   }
 
- 
+
 
   getBeritaByKategori(namaKategori: string): Observable<any> {
     const body = new URLSearchParams();
@@ -60,7 +60,7 @@ export class BeritaService {
     );
   }
 
-    getBeritaDetail(bid: number, uid: number) {
+  getBeritaDetail(bid: number, uid: number) {
 
     const body = new HttpParams()
       .set('bid', bid.toString())
@@ -78,21 +78,21 @@ export class BeritaService {
   }
 
   addRating(uid: number, bid: number, rating: number) {
-  const body = new HttpParams()
-    .set('uid', uid.toString())
-    .set('bid', bid.toString())
-    .set('rating', rating.toString());
+    const body = new HttpParams()
+      .set('uid', uid.toString())
+      .set('bid', bid.toString())
+      .set('rating', rating.toString());
 
-  const headers = new HttpHeaders({
-    'Content-Type': 'application/x-www-form-urlencoded'
-  });
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/x-www-form-urlencoded'
+    });
 
-  return this.http.post<any>(
-    this.baseUrl + 'add_rating.php',
-    body.toString(),
-    { headers }
-  );
-}
+    return this.http.post<any>(
+      this.baseUrl + 'add_rating.php',
+      body.toString(),
+      { headers }
+    );
+  }
 
 
 
@@ -108,7 +108,7 @@ export class BeritaService {
     );
   }
 
-   addKomentar(uid: number, bid: number, komentar: string): Observable<any> {
+  addKomentar(uid: number, bid: number, komentar: string): Observable<any> {
     const body = new FormData();
     body.append('uid', uid.toString());
     body.append('bid', bid.toString());
@@ -130,26 +130,26 @@ export class BeritaService {
 
   changeFavorite(uid: number, bid: number, isFavorite: boolean) {
 
-  const body = new HttpParams()
-    .set('uid', uid.toString())
-    .set('bid', bid.toString());
+    const body = new HttpParams()
+      .set('uid', uid.toString())
+      .set('bid', bid.toString());
 
-  const headers = new HttpHeaders({
-    'Content-Type': 'application/x-www-form-urlencoded'
-  });
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/x-www-form-urlencoded'
+    });
 
-  const url = isFavorite
-    ? this.baseUrl + 'del_favorit.php'
-    : this.baseUrl + 'add_favorit.php';
+    const url = isFavorite
+      ? this.baseUrl + 'del_favorit.php'
+      : this.baseUrl + 'add_favorit.php';
 
-  return this.http.post<any>(
-    url,
-    body.toString(),
-    { headers }
-  );
-}
+    return this.http.post<any>(
+      url,
+      body.toString(),
+      { headers }
+    );
+  }
 
-getBeritaByKeyword(keyword: string) {
+  getBeritaByKeyword(keyword: string) {
 
     const body = new HttpParams()
       .set('keyword', keyword);
@@ -179,6 +179,23 @@ getBeritaByKeyword(keyword: string) {
       { headers }
     );
   }
+
+  deleteRating(uid: number, bid: number) {
+    const body = new HttpParams()
+      .set('uid', uid.toString())
+      .set('bid', bid.toString());
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/x-www-form-urlencoded'
+    });
+
+    return this.http.post<any>(
+      this.baseUrl + 'del_rating.php',
+      body.toString(),
+      { headers }
+    );
+  }
+
 }
 
 
