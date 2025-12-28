@@ -138,7 +138,6 @@ export class BeritaService {
     'Content-Type': 'application/x-www-form-urlencoded'
   });
 
-  // jika sudah favorit → DELETE
   const url = isFavorite
     ? this.baseUrl + 'del_favorit.php'
     : this.baseUrl + 'add_favorit.php';
