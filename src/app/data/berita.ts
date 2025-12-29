@@ -261,6 +261,7 @@ export const updateBeritaArray = (updatedBerita: Berita[]): void => {
     BERITA.push(...updatedBerita); 
 }
 
+
 export const deleteBerita = (idBerita: number): boolean => {
     const initialLength = BERITA.length;
     const index = BERITA.findIndex((b) => b.id === idBerita);
