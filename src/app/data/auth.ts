@@ -10,30 +10,14 @@ export class AuthService {
 
   constructor(private router: Router) {}
 
-  login(username: string, password: string): boolean {
-    const users = getAllUsers();
-    const userFound = users.find(
-      (u) => u.username === username && u.password === password
-    );
+  // logout() {
+  //   localStorage.clear();
+  //   console.log('All session data cleared');
 
-    if (userFound) {
-      console.log('USER FOUND!');
-      localStorage.setItem(this.LOGGED_IN_KEY, 'true');
-      localStorage.setItem('loggedInUsername', userFound.username);
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  logout() {
-    localStorage.clear();
-    console.log('All session data cleared');
-
-    this.router.navigate(['/login']).then(() => {
-      window.location.reload();
-    });
-  }
+  //   this.router.navigate(['/login']).then(() => {
+  //     window.location.reload();
+  //   });
+  // }
 
   isLoggedIn(): boolean {
     return localStorage.getItem(this.LOGGED_IN_KEY) === 'true';

@@ -1,106 +1,77 @@
-ion-content {
-  --background: #000000 !important;
-
-  background: linear-gradient(
-    135deg,
-    var(--ion-color-dark) 0%,
-    var(--ion-color-darker) 100%
-  ) !important;
-}
-.kategori-card {
-  --background: #111111;
-}
-:root {
-  --ion-color-dark: #000000;
-  --ion-color-darker: #0a0a0a;
-  --ion-color-step-50: #ffffff;
-  --ion-color-step-100: #f0f0f0;
-}
-
-ion-content {
-  --background: var(--ion-color-dark);
-  --color: var(--ion-color-step-50);
-}
-
-ion-toolbar {
-  --background: transparent;
-  --color: var(--ion-color-step-50);
-  box-shadow: none;
-}
+ion-content {}
 
 .welcome-section {
-  h1 {
-    font-size: 1.8rem;
-    font-weight: 700;
-    margin-bottom: 4px;
-    color: var(--ion-color-step-50);
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  }
-  p {
-    color: var(--ion-color-step-100);
-    font-size: 1rem;
-    margin-bottom: 20px;
-    opacity: 0.9;
-  }
+    h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 4px;
+        color: var(--ion-color-step-50);
+    }
+
+    p {
+        color: var(--ion-color-step-100);
+        font-size: 1rem;
+        margin-bottom: 20px;
+        opacity: 0.9;
+    }
 }
 
 .kategori-grid {
-  padding-top: 10px;
+    padding-top: 10px;
 }
 
 ion-col {
-  padding: 5px;
+    padding: 5px;
 }
 
 .kategori-card {
-  --background: #111111;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-  border-radius: 12px;
-  margin: 0;
-  height: 160px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  transition: all 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
+    margin: 0;
+    height: 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
 
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.5);
-    border-color: rgba(255, 255, 255, 0.2);
-  }
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.5);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
 }
 
 .card-icon-wrapper {
-  width: 70px;
-  height: 70px;
-  background: rgba(0, 123, 255, 0.15);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 15px;
-  border: 2px solid var(--ion-color-primary);
+    width: 70px;
+    height: 70px;
+    background: rgba(0, 123, 255, 0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    border: 2px solid var(--ion-color-primary);
 }
 
 .card-icon {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
 }
 
 .kategori-nama-label {
-  padding: 0;
-  margin: 0;
+    padding: 0;
+    margin: 0;
 }
 
 .kategori-nama {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--ion-color-step-50);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ion-color-step-50);
 }
 
 .fab-container {
@@ -108,29 +79,29 @@ ion-col {
     right: 20px;
     bottom: 20px;
     z-index: 999;
-  }
-  
-  .fab-extended {
+}
+
+.fab-extended {
     display: flex;
     align-items: center;
     gap: 8px;
-  
+
     background-color: var(--ion-color-primary);
     color: white;
     border-radius: 30px;
     padding: 14px 20px;
-  
+
     font-size: 16px;
     border: none;
     outline: none;
-  
-    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-  }
-  .fab-extended:active {
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.fab-extended:active {
     opacity: 0.85;
-  }
-  
-  .fab-icon {
+}
+
+.fab-icon {
     font-size: 22px;
-  }
-  
+}

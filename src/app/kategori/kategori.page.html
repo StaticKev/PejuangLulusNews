@@ -1,11 +1,7 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-title>
-      <img
-        src="assets/icon/favicon.png"
-        alt="Logo"
-        style="height: 30px; vertical-align: middle; margin-right: 10px"
-      />
+      <img src="assets/icon/favicon.png" alt="Logo" style="height: 30px; vertical-align: middle; margin-right: 10px" />
       <b>Pejuang News</b>
     </ion-title>
     <ion-buttons slot="start">
@@ -24,11 +20,7 @@
 
   <ion-grid class="kategori-grid">
     <ion-row>
-      <ion-col
-        size="6"
-        *ngFor="let k of kategoriList"
-        (click)="goToBeritaByKategori(k.id)"
-      >
+      <ion-col size="6" *ngFor="let k of kategoriList" (click)="goToBeritaByKategori(k.id)">
         <ion-card class="kategori-card">
           <div class="card-icon-wrapper">
             <img [src]="k.icon" alt="icon kategori" class="card-icon" />

@@ -15,6 +15,8 @@ export interface Berita {
 
 export interface BeritaDetail extends Berita {
   namaKategori: string[];
+    rating?: number | null;
+
 }
 
 // Acuan Kategori:

@@ -1,13 +1,10 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-title>
-      <img
-        src="assets/icon/favicon.png"
-        alt="Logo"
-        style="height: 30px; vertical-align: middle; margin-right: 10px"
-      />
+      <img src="assets/icon/favicon.png" alt="Logo" style="height: 30px; vertical-align: middle; margin-right: 10px" />
       <b>Pejuang News</b>
     </ion-title>
+
     <ion-buttons slot="end">
       <ion-button (click)="doLogout()" fill="clear" color="medium">
         <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
@@ -17,64 +14,77 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
+
   <div class="welcome-section">
     <h1>Selamat Datang, {{ namaUser }}!</h1>
     <p>Berikut adalah berita terbaru hari ini.</p>
   </div>
 
+  <!-- =====================
+       FILTER KATEGORI
+       ===================== -->
   <div class="kategori-section">
     <div class="section-header">
       <h2>Kategori</h2>
-      <ion-text color="primary" routerLink="/kategori" class="lihat-semua-text">
-        Lihat Semua
-      </ion-text>
     </div>
 
     <div class="kategori-scroll">
-      <ion-chip
-        *ngFor="let kat of semuaKategori"
-        (click)="lihatKategori(kat.id)"
-        [color]="kategoriAktif === kat.id ? 'primary' : ''"
-      >
+
+      <!-- ===== SEMUA ===== -->
+      <ion-chip (click)="lihatKategori(null)" [color]="kategoriAktif === null ? 'primary' : 'medium'">
+        <ion-label>Semua</ion-label>
+      </ion-chip>
+
+      <!-- ===== PER KATEGORI ===== -->
+      <ion-chip *ngFor="let kat of semuaKategori" (click)="lihatKategori(kat.nama)"
+        [color]="kategoriAktif === kat.nama ? 'primary' : 'medium'">
         <ion-label>{{ kat.nama }}</ion-label>
       </ion-chip>
+
+      <!-- 🔹 CHIP TAMBAH KATEGORI -->
+      <ion-chip color="primary" (click)="keKategori()">
+        <ion-icon name="add-circle-outline"></ion-icon>
+        <ion-label>Tambah</ion-label>
+      </ion-chip>
+
     </div>
   </div>
 
+  <!-- =====================
+       BERITA TERBARU
+       ===================== -->
   <div class="berita-section">
     <h2>Berita Terbaru</h2>
 
-    <ion-card
-      *ngFor="let berita of beritaTerbaruDenganRating"
-      routerLink="/detailBerita/{{berita.id}}/home"
-      class="berita-card compact-card"
-    >
+    <ion-card *ngFor="let berita of beritaTerbaru" routerLink="/detailBerita/{{ berita.id }}/home"
+      class="berita-card compact-card">
       <ion-item lines="none" detail="false">
         <ion-thumbnail slot="start">
           <img [src]="berita.foto_utama" class="berita-image-thumb" />
         </ion-thumbnail>
 
         <ion-label>
+
           <ion-chip color="primary" class="kategori-chip-kecil" outline="true">
             <ion-label>{{ getNamaKategori(berita) }}</ion-label>
           </ion-chip>
+
           <ion-chip color="warning" class="rating-chip-kecil">
             <ion-icon name="star" style="font-size: 14px"></ion-icon>
-            <ion-label style="font-size: 0.75rem"
-              >{{ getAverageRating(berita.id) | number:'1.1-1' }}</ion-label
-            >
+            <ion-label style="font-size: 0.75rem">
+              {{ getRating(berita) | number:'1.1-1' }}
+            </ion-label>
           </ion-chip>
-          <p class="berita-judul-kompak">{{ berita.judul }}</p>
+
+          <p class="berita-judul-kompak">
+            {{ berita.judul }}
+          </p>
+
         </ion-label>
 
         <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
       </ion-item>
     </ion-card>
   </div>
-  <div class="ion-padding">
-    <ion-button expand="block" color="success" routerLink="/tambah-berita">
-      <ion-icon slot="start" name="add-circle-outline"></ion-icon>
-      Tambah Berita
-    </ion-button>
-  </div>
+
 </ion-content>
