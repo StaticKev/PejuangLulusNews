@@ -195,6 +195,20 @@ export class BeritaService {
       { headers }
     );
   }
+  addReply(uid: number, bid: number, kid: number, komentar: string) {
+  const body = new URLSearchParams();
+  body.set('uid', uid.toString());
+  body.set('bid', bid.toString());
+  body.set('kid', kid.toString());
+  body.set('komentar', komentar);
+
+  return this.http.post<any>(
+    this.baseUrl + 'add_reply.php',
+    body.toString(),
+    { headers: this.headers }
+  );
+}
+
 
 }
 
