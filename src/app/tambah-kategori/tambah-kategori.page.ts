@@ -19,7 +19,6 @@ import { BeritaService } from '../berita.service';
 
 @Component({
   selector: 'app-tambah-kategori',
-  standalone: true,
   imports: [CommonModule, IonicModule, ReactiveFormsModule, FormsModule],
   templateUrl: './tambah-kategori.page.html',
   styleUrls: ['./tambah-kategori.page.scss'],
