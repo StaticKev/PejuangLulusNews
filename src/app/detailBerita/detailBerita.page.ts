@@ -9,6 +9,7 @@ import { AlertController, ToastController } from '@ionic/angular';
 import { take } from 'rxjs/operators';
 
 interface Komentar {
+  id?: number;
   user: User;
   komentar: string;
   timestamp: Date;
@@ -80,20 +81,37 @@ export class DetailBerita {
               gambar_konten: data.gambar || [],
 
               komentar: (data.komentar || []).map((k: any) => ({
-                user: {
-                  username: k.username,
-                  id: 0,
-                  nama: k.username,
-                  email: '',
-                  password: '',
-                  favorit: []
-                } as User,
-                komentar: k.komentar,
-                timestamp: new Date(k.timestamp),
-                replies: [],
-                showReplyBox: false,
-                tempReply: ''
-              })),
+  id: k.id,
+  user: {
+    username: k.username,
+    id: 0,
+    nama: k.username,
+    email: '',
+    password: '',
+    favorit: []
+  } as User,
+  komentar: k.komentar,
+  timestamp: new Date(k.timestamp),
+
+  replies: (k.reply || []).map((r: any) => ({
+    user: {
+      username: r.username,
+      id: 0,
+      nama: r.username,
+      email: '',
+      password: '',
+      favorit: []
+    } as User,
+    komentar: r.komentar,
+    timestamp: new Date(r.timestamp),
+    replies: []
+  })),
+
+  showReplyBox: false,
+  tempReply: ''
+})),
+
+
 
               // Mapping Kategori
               kategori: (data.kategori || []).map((cat: any) => ({
@@ -117,6 +135,41 @@ export class DetailBerita {
         });
     });
   }
+
+  private buildKomentarTree(flat: any[]): Komentar[] {
+  const map = new Map<number, Komentar>();
+  const roots: Komentar[] = [];
+
+  flat.forEach(k => {
+    map.set(k.id, {
+      id: k.id,
+      user: {
+        username: k.username,
+        id: k.user_id,
+        nama: k.username,
+        email: '',
+        password: '',
+        favorit: []
+      } as User,
+      komentar: k.komentar,
+      timestamp: new Date(k.timestamp),
+      replies: [],
+      showReplyBox: false,
+      tempReply: ''
+    });
+  });
+
+  flat.forEach(k => {
+    if (k.reply_to) {
+      map.get(k.reply_to)?.replies?.push(map.get(k.id)!);
+    } else {
+      roots.push(map.get(k.id)!);
+    }
+  });
+
+  return roots;
+}
+
 
 
 
@@ -203,13 +256,10 @@ export class DetailBerita {
     const bid = this.currentBerita.id;
     const rating = star;
 
-    // Update UI langsung
     this.userRating = rating;
 
-    // Hapus rating lama dulu
     this.beritaService.deleteRating(uid, bid).subscribe({
       next: () => {
-        // Tambahkan rating baru
         this.beritaService.addRating(uid, bid, rating).subscribe({
           next: (res: any) => {
             if (res.result !== 'success') {
@@ -224,7 +274,6 @@ export class DetailBerita {
         });
       },
       error: () => {
-        // Jika rating lama tidak ada, tetap bisa menambah rating baru
         this.beritaService.addRating(uid, bid, rating).subscribe({
           next: (res: any) => {
             if (res.result !== 'success') {
@@ -257,7 +306,6 @@ export class DetailBerita {
       .subscribe({
         next: (res: any) => {
           if (res.result === 'success') {
-            // toggle UI
             this.isFavorite = !this.isFavorite;
           } else {
             alert(res.message);
@@ -326,42 +374,54 @@ export class DetailBerita {
 
 
 
-  // === Balasan Komentar ===
+  
+  // REPLY KOMENTAR 
   toggleReplyBox(komentar: Komentar) {
     komentar.showReplyBox = !komentar.showReplyBox;
   }
 
   tambahBalasan(komentar: Komentar) {
-    if (!this.username) {
-      alert('Anda harus login untuk membalas!');
-      return;
-    }
-
-    const replyText = komentar.tempReply?.trim();
-    if (!replyText) return;
-
-    const newReply: Komentar = {
-      user: {
-        username: this.username,
-        id: this.uid,
-        nama: "",
-        email: '',
-        password: '',
-        favorit: []
-      } as User,
-      komentar: replyText,
-      timestamp: new Date(),
-      replies: [],
-    };
-
-    if (!komentar.replies) {
-      komentar.replies = [];
-    }
-
-    komentar.replies.push(newReply);
-
-    komentar.tempReply = '';
-    komentar.showReplyBox = false;
+  if (!this.username) {
+    alert('Anda harus login untuk membalas!');
+    return;
   }
+
+  const replyText = komentar.tempReply?.trim();
+  if (!replyText || !this.currentBerita || !komentar.id) return;
+
+  const uid = this.uid;
+  const bid = this.currentBerita.id;
+  const kid = komentar.id;
+
+  this.beritaService.addReply(uid, bid, kid, replyText).subscribe({
+    next: (res: any) => {
+      if (res.result === 'success') {
+        komentar.replies = komentar.replies || [];
+        komentar.replies.push({
+          user: {
+            username: this.username!,
+            id: uid,
+            nama: '',
+            email: '',
+            password: '',
+            favorit: []
+          } as User,
+          komentar: replyText,
+          timestamp: new Date(),
+          replies: []
+        });
+
+        komentar.tempReply = '';
+        komentar.showReplyBox = false;
+      } else {
+        alert(res.message);
+      }
+    },
+    error: () => {
+      alert('Gagal mengirim balasan');
+    }
+  });
+}
+
 
 }
