@@ -24,12 +24,12 @@ export class BeritaService {
   }
 
     addBerita(judul: string, foto_utama: string, kategori: number[], gambar: string[], isi: string) {
-        const body = new FormData();
-        body.append('judul', judul);
-        body.append('foto_utama', foto_utama);
-        body.append('isi', isi);
-        body.append('kategori', kategori.join(","));
-        body.append('gambar', gambar.join(","));
+        const body = new HttpParams()
+            .set('judul', judul)
+            .set('foto_utama', foto_utama)
+            .set('isi', isi)
+            .set('kategori', kategori.join(","))
+            .set('gambar', gambar.join(",")); 
 
         const headers = new HttpHeaders({
             'Content-Type': 'application/x-www-form-urlencoded'

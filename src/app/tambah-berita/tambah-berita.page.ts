@@ -46,7 +46,7 @@ export class TambahBeritaPage implements OnInit {
   }
 
   get idKategori(): FormArray {
-    return this.form.get('idKategori') as FormArray;
+    return this.form.get('id_kategori') as FormArray;
   }
 
   addGambar() {
@@ -162,7 +162,7 @@ export class TambahBeritaPage implements OnInit {
   
           if (res.result === 'success') {
             const toast = await this.toastCtrl.create({
-              message: 'Kategori berhasil ditambahkan.',
+              message: res.message,
               duration: 1800,
               position: 'top'
             });
@@ -172,7 +172,7 @@ export class TambahBeritaPage implements OnInit {
             this.router.navigateByUrl('/home');
           } else {
             const toast = await this.toastCtrl.create({
-              message: 'Gagal menambahkan kategori.',
+              message: res.result,
               duration: 2000,
               position: 'top'
             });
@@ -180,30 +180,5 @@ export class TambahBeritaPage implements OnInit {
           }
         });
 
-    
-        // const semua = getAllBerita();
-        // const maxId = semua.reduce((m, b) => (b.id > m ? b.id : m), 0);
-        // const id = maxId + 1;
-    
-        // const tanggalStr = this.form.value.tanggal;
-        // const timestamp = this.parseTanggal(tanggalStr);
-    
-        // const berita: Berita = {
-        //   id,
-        //   judul: this.form.value.judul,
-        //   foto_utama: this.form.value.foto_utama,
-        //   idKategori: this.idKategori.value,
-        //   gambar_konten: this.gambarKonten.controls.map((c) => c.value).filter((v: string) => v && v.trim() !== ''),
-        //   timestamp,
-        //   isi: this.form.value.isi,
-        //   komentar: [],
-        //   kalimat: '',
-        // };
-    
-        // addBerita(berita);
-    
-        // const toast = await this.toastCtrl.create({ message: 'Berita berhasil ditambahkan.', duration: 1800, position: 'top' });
-        // await toast.present();
-        // this.router.navigateByUrl('/home');
       }
 }
