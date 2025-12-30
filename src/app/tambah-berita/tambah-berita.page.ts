@@ -4,7 +4,7 @@ import { IonicModule, ToastController } from '@ionic/angular';
 import { FormBuilder, FormArray, FormGroup, FormControl, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Berita, addBerita, getAllBerita } from '../data/berita';
 import { Router } from '@angular/router';
-import { getAllKategori, Kategori } from '../data/kategori';
+import { BeritaService } from '../berita.service';
 
 @Component({
   selector: 'app-tambah-berita',
@@ -14,27 +14,27 @@ import { getAllKategori, Kategori } from '../data/kategori';
   styleUrls: ['./tambah-berita.page.scss'],
 })
 export class TambahBeritaPage implements OnInit {
-  form!: FormGroup;
+    semuaKategori: any[] = [];
 
-  listKategori: Kategori[]
+  form!: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     private toastCtrl: ToastController,
-    private router: Router
-  ) {
-    this.listKategori = getAllKategori();
-  }
+    private router: Router,
+    private beritaService: BeritaService
+  ) { }
 
   ngOnInit() {
     this.form = this.fb.group({
       judul: ['', Validators.required],
-      tanggal: ['', Validators.required],
       foto_utama: ['', Validators.required],
       gambar_konten: this.fb.array([this.fb.control('')]),
       isi: ['', Validators.required],
-      idKategori: this.fb.array([])
+      id_kategori: this.fb.array([])
     });
+
+    this.loadKategori();
   }
 
   get gambarKonten(): FormArray {
@@ -126,39 +126,6 @@ export class TambahBeritaPage implements OnInit {
     }
   }
 
-  async submit() {
-    if (this.form.invalid) {
-      const t = await this.toastCtrl.create({ message: 'Silakan lengkapi form.', duration: 2000, position: 'top' });
-      await t.present();
-      return;
-    }
-
-    const semua = getAllBerita();
-    const maxId = semua.reduce((m, b) => (b.id > m ? b.id : m), 0);
-    const id = maxId + 1;
-
-    const tanggalStr = this.form.value.tanggal;
-    const timestamp = this.parseTanggal(tanggalStr);
-
-    const berita: Berita = {
-      id,
-      judul: this.form.value.judul,
-      foto_utama: this.form.value.foto_utama,
-      idKategori: this.idKategori.value,
-      gambar_konten: this.gambarKonten.controls.map((c) => c.value).filter((v: string) => v && v.trim() !== ''),
-      timestamp,
-      isi: this.form.value.isi,
-      komentar: [],
-      kalimat: '',
-    };
-
-    addBerita(berita);
-
-    const toast = await this.toastCtrl.create({ message: 'Berita berhasil ditambahkan.', duration: 1800, position: 'top' });
-    await toast.present();
-    this.router.navigateByUrl('/home');
-  }
-
     toggleKategori(id: number, checked: boolean) {
         if (checked) {
             this.idKategori.push(new FormControl(id));
@@ -169,4 +136,74 @@ export class TambahBeritaPage implements OnInit {
             }
         }
     }
+
+    loadKategori() {
+        this.beritaService.getKategori().subscribe((res: any) => {
+            this.semuaKategori = res.data || [];
+        });
+    }
+
+    async submit() {
+        if (this.form.invalid) {
+          const t = await this.toastCtrl.create({ message: 'Silakan lengkapi form.', duration: 2000, position: 'top' });
+          await t.present();
+          return;
+        }
+
+        const judul = this.form.value.judul
+        const foto_utama = this.form.value.foto_utama
+        const isi = this.form.value.isi
+        const id_kategori = this.form.value.id_kategori
+        const gambar_konten = this.form.value.gambar_konten 
+
+        this.beritaService
+        .addBerita(judul, foto_utama, id_kategori, gambar_konten, isi)
+        .subscribe(async (res: any) => {
+  
+          if (res.result === 'success') {
+            const toast = await this.toastCtrl.create({
+              message: 'Kategori berhasil ditambahkan.',
+              duration: 1800,
+              position: 'top'
+            });
+            await toast.present();
+  
+            // balik ke halaman kategori / home
+            this.router.navigateByUrl('/home');
+          } else {
+            const toast = await this.toastCtrl.create({
+              message: 'Gagal menambahkan kategori.',
+              duration: 2000,
+              position: 'top'
+            });
+            await toast.present();
+          }
+        });
+
+    
+        // const semua = getAllBerita();
+        // const maxId = semua.reduce((m, b) => (b.id > m ? b.id : m), 0);
+        // const id = maxId + 1;
+    
+        // const tanggalStr = this.form.value.tanggal;
+        // const timestamp = this.parseTanggal(tanggalStr);
+    
+        // const berita: Berita = {
+        //   id,
+        //   judul: this.form.value.judul,
+        //   foto_utama: this.form.value.foto_utama,
+        //   idKategori: this.idKategori.value,
+        //   gambar_konten: this.gambarKonten.controls.map((c) => c.value).filter((v: string) => v && v.trim() !== ''),
+        //   timestamp,
+        //   isi: this.form.value.isi,
+        //   komentar: [],
+        //   kalimat: '',
+        // };
+    
+        // addBerita(berita);
+    
+        // const toast = await this.toastCtrl.create({ message: 'Berita berhasil ditambahkan.', duration: 1800, position: 'top' });
+        // await toast.present();
+        // this.router.navigateByUrl('/home');
+      }
 }

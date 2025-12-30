@@ -10,12 +10,7 @@
       <ion-label position="stacked">Judul</ion-label>
       <ion-input formControlName="judul" placeholder="Masukan judul"></ion-input>
     </ion-item>
-
-    <ion-item>
-      <ion-label position="stacked">Tanggal (contoh: 28 Sep 2025, 10:30:00AM)</ion-label>
-      <ion-input formControlName="tanggal" placeholder="28 Sep 2025, 10:30:00AM"></ion-input>
-    </ion-item>
-
+      
     <ion-item>
       <ion-label position="stacked">Foto Utama (URL)</ion-label>
       <ion-input formControlName="foto_utama" placeholder="https://..."></ion-input>
@@ -27,7 +22,7 @@
 
     <ion-item>
         <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; margin-bottom: 8px;">
-            <div *ngFor="let k of listKategori" style="display: flex; align-items: center;">
+            <div *ngFor="let k of semuaKategori" style="display: flex; align-items: center;">
               <ion-checkbox
                 [value]="k.nama"
                 (ionChange)="toggleKategori(k.id, $event.detail.checked)">
