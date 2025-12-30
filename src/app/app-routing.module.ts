@@ -8,12 +8,12 @@ const routes: Routes = [
     redirectTo: 'login',
     pathMatch: 'full',
   },
-    {
+  {
     path: 'login',
     loadChildren: () =>
       import('./login/login.module').then((m) => m.LoginPageModule),
   },
-  
+
   {
     path: 'home',
     loadChildren: () =>
@@ -54,10 +54,17 @@ const routes: Routes = [
         (m) => m.TambahBeritaModule
       ),
     canActivate: [AuthGuard],
-  },  {
-    path: 'tambah-kategori',
-    loadChildren: () => import('./tambah-kategori/tambah-kategori.module').then( m => m.TambahKategoriPageModule)
   },
+  {
+    path: 'tambah-kategori',
+    loadChildren: () => import('./tambah-kategori/tambah-kategori.module').then(m => m.TambahKategoriPageModule)
+  },
+  {
+    path: 'signup',
+    loadComponent: () =>
+      import('./signup/signup.page').then(m => m.SignupPage)
+  }
+
 
 
 
@@ -70,4 +77,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

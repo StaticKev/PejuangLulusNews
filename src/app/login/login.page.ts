@@ -10,7 +10,6 @@ import { AuthService } from '../auth.service';
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
-  standalone: true,
   imports: [CommonModule, IonicModule, FormsModule],
 })
 export class LoginPage {
@@ -18,7 +17,7 @@ export class LoginPage {
   inputPassword = '';
   loginError = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) { }
 
   ionViewWillEnter() {
     if (this.authService.isLoggedIn()) {
@@ -26,19 +25,22 @@ export class LoginPage {
     }
   }
 
-doLogin() {
-  this.authService.login(this.inputUsername, this.inputPassword).subscribe(
-    (response) => {
-      if (response.result === 'success') {
-        this.router.navigate(['/home']);
-      } else {
-        alert(response.message); 
+  doLogin() {
+    this.authService.login(this.inputUsername, this.inputPassword).subscribe(
+      (response) => {
+        if (response.result === 'success') {
+          this.router.navigate(['/home']);
+        } else {
+          alert(response.message);
+        }
+      },
+      (error) => {
+        console.error('Network Error:', error);
+        alert('Gagal koneksi ke server');
       }
-    },
-    (error) => {
-      console.error('Network Error:', error);
-      alert('Gagal koneksi ke server');
-    }
-  );
-}
+    );
+  }
+  goToRegister() {
+    this.router.navigate(['/signup']);
+  }
 }

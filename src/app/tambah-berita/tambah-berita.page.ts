@@ -8,7 +8,6 @@ import { getAllKategori, Kategori } from '../data/kategori';
 
 @Component({
   selector: 'app-tambah-berita',
-  standalone: true,
   imports: [CommonModule, IonicModule, ReactiveFormsModule, FormsModule],
   templateUrl: './tambah-berita.page.html',
   styleUrls: ['./tambah-berita.page.scss'],
