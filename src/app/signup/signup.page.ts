@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, NavController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
-import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-signup',
@@ -25,14 +24,24 @@ export class SignupPage {
     private auth: AuthService,
     private router: Router,
     private navCtrl: NavController
-  ) { }
+  ) {}
 
   register() {
     this.errorMessage = '';
 
-    // Validasi
     if (!this.nama || /\d/.test(this.nama)) {
-      this.errorMessage = 'Nama wajib diisi dan tidak boleh angka';
+      this.errorMessage = 'Nama wajib diisi dan tidak boleh mengandung angka';
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!this.email) {
+      this.errorMessage = 'Email wajib diisi';
+      return;
+    }
+
+    if (!emailRegex.test(this.email)) {
+      this.errorMessage = 'Format email tidak valid';
       return;
     }
 
@@ -46,15 +55,19 @@ export class SignupPage {
       return;
     }
 
-    // 🔥 PANGGIL SERVICE
     this.auth.register(this.nama, this.email, this.password)
-      .subscribe(res => {
-        console.log('RESPONSE REGISTER:', res);
-        if (res.result === 'success') {
-          alert('Register berhasil');
-         window.location.href = '/login';
-        } else {
-          this.errorMessage = res.message;
+      .subscribe({
+        next: (res: any) => {
+          console.log('RESPONSE REGISTER:', res);
+          if (res.result === 'success') {
+            alert('Register berhasil');
+            this.router.navigate(['/login']);
+          } else {
+            this.errorMessage = res.message || 'Register gagal';
+          }
+        },
+        error: () => {
+          this.errorMessage = 'Terjadi kesalahan pada server';
         }
       });
   }

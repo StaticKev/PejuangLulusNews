@@ -224,7 +224,15 @@ export class BeritaService {
   );
 }
 
+checkJudul(keyword: string) {
+  const body = new FormData();
+  body.append('keyword', keyword);
 
+  return this.http.post(
+    this.baseUrl + 'get_berita_by_keyword.php',
+    body
+  );
+}
 }
 
 

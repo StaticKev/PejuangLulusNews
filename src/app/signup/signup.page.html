@@ -5,24 +5,41 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+
   <ion-item>
     <ion-label position="floating">Nama</ion-label>
-    <ion-input [(ngModel)]="nama"></ion-input>
+    <ion-input
+      type="text"
+      [(ngModel)]="nama"
+      required>
+    </ion-input>
   </ion-item>
 
   <ion-item>
     <ion-label position="floating">Email</ion-label>
-    <ion-input type="email" [(ngModel)]="email"></ion-input>
+    <ion-input
+      type="email"
+      [(ngModel)]="email"
+      required>
+    </ion-input>
   </ion-item>
 
   <ion-item>
     <ion-label position="floating">Password</ion-label>
-    <ion-input type="password" [(ngModel)]="password"></ion-input>
+    <ion-input
+      type="password"
+      [(ngModel)]="password"
+      required>
+    </ion-input>
   </ion-item>
 
   <ion-item>
     <ion-label position="floating">Konfirmasi Password</ion-label>
-    <ion-input type="password" [(ngModel)]="confirmPassword"></ion-input>
+    <ion-input
+      type="password"
+      [(ngModel)]="confirmPassword"
+      required>
+    </ion-input>
   </ion-item>
 
   <ion-text color="danger" *ngIf="errorMessage">
@@ -32,4 +49,5 @@
   <ion-button expand="block" (click)="register()">
     Daftar
   </ion-button>
+
 </ion-content>
