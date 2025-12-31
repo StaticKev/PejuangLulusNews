@@ -224,15 +224,16 @@ export class BeritaService {
   );
 }
 
-checkJudul(keyword: string) {
+checkJudulExact(judul: string) {
   const body = new FormData();
-  body.append('keyword', keyword);
+  body.append('judul', judul);
 
   return this.http.post(
-    this.baseUrl + 'get_berita_by_keyword.php',
+    this.baseUrl + 'cek_judul_exact.php',
     body
   );
 }
+
 }
 
 

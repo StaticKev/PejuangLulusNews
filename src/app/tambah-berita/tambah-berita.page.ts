@@ -95,12 +95,11 @@ export class TambahBeritaPage implements OnInit {
 
     const judul = this.form.value.judul.trim();
 
-    this.beritaService.checkJudul(judul).subscribe(async (cek: any) => {
-
-      if (cek.result === 'success' && cek.data.length > 0) {
+    this.beritaService.checkJudulExact(judul).subscribe(async (cek: any) => {
+      if (cek.result === 'exists') {
         const toast = await this.toastCtrl.create({
-          message: 'Judul berita sudah ada. Gunakan judul lain.',
-          duration: 2200,
+          message: 'Judul berita sudah ada (harus unik)',
+          duration: 2000,
           position: 'top',
           color: 'danger'
         });
