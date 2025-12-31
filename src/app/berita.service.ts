@@ -23,7 +23,24 @@ export class BeritaService {
     return this.http.get(this.baseUrl + 'get_kategori.php');
   }
 
+    addBerita(judul: string, foto_utama: string, kategori: number[], gambar: string[], isi: string) {
+        const body = new HttpParams()
+            .set('judul', judul)
+            .set('foto_utama', foto_utama)
+            .set('isi', isi)
+            .set('kategori', kategori.join(","))
+            .set('gambar', gambar.join(",")); 
 
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/x-www-form-urlencoded'
+            });
+        
+            return this.http.post<any>(
+            this.baseUrl + 'add_berita.php',
+            body.toString(),
+            { headers }
+        );
+    }
 
   getBeritaByKategori(namaKategori: string): Observable<any> {
     const body = new URLSearchParams();
@@ -36,7 +53,6 @@ export class BeritaService {
     );
   }
 
-
   deleteBerita(beritaId: number): Observable<any> {
     const body = new URLSearchParams();
     body.set('id', beritaId.toString());
@@ -47,7 +63,6 @@ export class BeritaService {
       { headers: this.headers }
     );
   }
-
 
   getAllBerita(): Observable<any> {
     const body = new URLSearchParams();

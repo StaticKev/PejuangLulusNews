@@ -93,6 +93,7 @@ export class TambahKategoriPage implements OnInit {
         }
       });
   }
+  
   keKategori() {
     this.navCtrl.navigateRoot('/kategori');
   }
