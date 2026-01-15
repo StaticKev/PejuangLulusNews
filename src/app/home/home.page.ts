@@ -15,14 +15,6 @@ import { BeritaService } from '../berita.service';
   imports: [IonicModule, CommonModule, RouterModule],
 })
 export class HomePage implements OnInit {
-
-  // ===== DUMMY (dikomen) =====
-  // public semuaBerita: BeritaDetail[] = [];
-  // public beritaTerbaruDenganRating: (BeritaDetail & { avgRating: number })[] = [];
-  // public semuaKategori: Kategori[] = [];
-  // public kategoriAktif: number | null = null;
-
-  // ===== API VERSION =====
   semuaBerita: any[] = [];
   beritaTerbaru: any[] = [];
   semuaKategori: any[] = [];
@@ -43,8 +35,6 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit() {
-
-    // ===== API VERSION =====
     this.loadKategori();
 
     this.route.queryParams.subscribe(params => {
@@ -59,11 +49,6 @@ export class HomePage implements OnInit {
       }
     });
   }
-
-  /* =====================
-     API FUNCTIONS
-     ===================== */
-
   loadSemuaBerita() {
     this.beritaService.getAllBerita().subscribe((res: any) => {
       this.beritaTerbaru = res.result === 'success' ? res.data : [];
@@ -82,56 +67,11 @@ export class HomePage implements OnInit {
     });
   }
 
-  /* =====================
-     DUMMY FUNCTIONS (dikomen)
-     ===================== */
-
-  /*
-  private processBeritaWithRating(beritaArray: BeritaDetail[]) {
-    this.beritaTerbaruDenganRating = beritaArray.map((berita) => {
-      const avgRating = this.getAverageRating(berita.id);
-      return { ...berita, avgRating };
-    });
-  }
-
-  getAverageRating(beritaId: number): number {
-    const ratings = getAllRating().filter((r) => r.berita.id === beritaId);
-    if (ratings.length === 0) return 0;
-    const total = ratings.reduce((sum, r) => sum + r.nilai, 0);
-    return parseFloat((total / ratings.length).toFixed(1));
-  }
-  */
-
-  /* =====================
-     UI ACTION
-     ===================== */
-
-  // ===== DUMMY (dikomen) =====
-  /*
-  lihatKategori(idKategori: number) {
-    if (this.kategoriAktif === idKategori) {
-      this.router.navigate(['/home']);
-    } else {
-      const kategori = this.semuaKategori.find(k => k.id === idKategori);
-      if (kategori) {
-        this.router.navigate(['/home'], {
-          queryParams: { kategori: kategori.nama.toLowerCase() }
-        });
-      }
-    }
-  }
-  */
-
-  // ===== API VERSION =====
   lihatKategori(namaKategori: string | null) {
-
-    // klik "Semua"
     if (namaKategori === null) {
       this.router.navigate(['/home']);
       return;
     }
-
-    // klik kategori yang sama → reset
     if (this.kategoriAktif === namaKategori) {
       this.router.navigate(['/home']);
     } else {
