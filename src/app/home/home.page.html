@@ -19,29 +19,19 @@
     <h1>Selamat Datang, {{ namaUser }}!</h1>
     <p>Berikut adalah berita terbaru hari ini.</p>
   </div>
-
-  <!-- =====================
-       FILTER KATEGORI
-       ===================== -->
   <div class="kategori-section">
     <div class="section-header">
       <h2>Kategori</h2>
     </div>
 
     <div class="kategori-scroll">
-
-      <!-- ===== SEMUA ===== -->
       <ion-chip (click)="lihatKategori(null)" [color]="kategoriAktif === null ? 'primary' : 'medium'">
         <ion-label>Semua</ion-label>
       </ion-chip>
-
-      <!-- ===== PER KATEGORI ===== -->
       <ion-chip *ngFor="let kat of semuaKategori" (click)="lihatKategori(kat.nama)"
         [color]="kategoriAktif === kat.nama ? 'primary' : 'medium'">
         <ion-label>{{ kat.nama }}</ion-label>
       </ion-chip>
-
-      <!-- 🔹 CHIP TAMBAH KATEGORI -->
       <ion-chip color="primary" (click)="keKategori()">
         <ion-icon name="add-circle-outline"></ion-icon>
         <ion-label>Tambah</ion-label>
@@ -49,10 +39,6 @@
 
     </div>
   </div>
-
-  <!-- =====================
-       BERITA TERBARU
-       ===================== -->
   <div class="berita-section">
     <h2>Berita Terbaru</h2>
 

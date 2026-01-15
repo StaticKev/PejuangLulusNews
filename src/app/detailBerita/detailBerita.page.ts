@@ -110,10 +110,6 @@ export class DetailBerita {
   showReplyBox: false,
   tempReply: ''
 })),
-
-
-
-              // Mapping Kategori
               kategori: (data.kategori || []).map((cat: any) => ({
                 nama: cat.nama,
                 icon: cat.icon
@@ -170,13 +166,6 @@ export class DetailBerita {
   return roots;
 }
 
-
-
-
-
-
-
-  // Delete berita
   async presentToast(message: string, color: string) {
     const toast = await this.toastController.create({
       message: message,
@@ -225,7 +214,6 @@ export class DetailBerita {
       });
   }
 
-  // === Rating ===
   loadUserRating() {
     if (!this.username || !this.currentBerita) {
       this.userRating = 0;
@@ -316,10 +304,6 @@ export class DetailBerita {
         }
       });
   }
-
-
-  // === Komentar ===
-
   tambahKomentar() {
     if (!this.username) {
       alert('Silakan login terlebih dahulu');
@@ -372,10 +356,6 @@ export class DetailBerita {
       });
   }
 
-
-
-  
-  // REPLY KOMENTAR 
   toggleReplyBox(komentar: Komentar) {
     komentar.showReplyBox = !komentar.showReplyBox;
   }
